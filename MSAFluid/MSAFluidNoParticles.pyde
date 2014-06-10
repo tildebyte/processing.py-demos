@@ -2,10 +2,7 @@
 
  Demo of the MSAFluid library (www.memo.tv/msafluid_for_processing)
  Move mouse to add dye and forces to the fluid.
- Click mouse to turn off fluid rendering seeing only particles and their paths.
- Demonstrates feeding input into the fluid and reading data back (to update
- the particles).
- Also demonstrates using Vertex Arrays for particle rendering.
+ Demonstrates feeding input into the fluid.
  Port to processing.py and Superfast Blur added
  (http://incubator.quasimondo.com/processing/superfast_blur.php)
  by Ben Alkov, 2014.
@@ -41,16 +38,11 @@
  # *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  # *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 add_library('MSAFluid')
-from processing.opengl import *
-from javax.media.opengl import *
-from particle_system import ParticleSystem
 
 FLUID_WIDTH = 120
 invWidth = 0
 invHeight = 0
 fluidSolver = None
-particleSystem = None
-drawFluid = True
 imgFluid = None
 aspectRatio = 0
 
@@ -69,7 +61,6 @@ def setup():
     # Create image to hold fluid picture.
     imgFluid = createImage(fluidSolver.getWidth(),
                            fluidSolver.getHeight(), RGB)
-    particleSystem = ParticleSystem()
 
 
 def mouseMoved():
@@ -82,20 +73,14 @@ def mouseMoved():
 
 def draw():
     fluidSolver.update()
-    if drawFluid:
-        imgFluid.loadPixels()
-        for i in range(fluidSolver.getNumCells()):
-            imgFluid.pixels[i] = color(fluidSolver.r[i] * 2,
-                                       fluidSolver.g[i] * 2,
-                                       fluidSolver.b[i] * 2)
-        # imgFluid.pixels = fastBlur(imgFluid, 2)
-        imgFluid.updatePixels()
-        image(imgFluid, 0, 0, width, height)
-    particleSystem.updateAndDraw()
-
-
-def mousePressed():
-    drawFluid = not drawFluid
+    imgFluid.loadPixels()
+    for i in range(fluidSolver.getNumCells()):
+        imgFluid.pixels[i] = color(fluidSolver.r[i] * 2,
+                                   fluidSolver.g[i] * 2,
+                                   fluidSolver.b[i] * 2)
+    # imgFluid.pixels = fastBlur(imgFluid, 2)
+    imgFluid.updatePixels()
+    image(imgFluid, 0, 0, width, height)
 
 
 # Add force and dye to fluid, and create particles.
@@ -123,7 +108,6 @@ def addForce(x, y, dx, dy):
         fluidSolver.rOld[index] += red(drawColor) * colorMult
         fluidSolver.gOld[index] += green(drawColor) * colorMult
         fluidSolver.bOld[index] += blue(drawColor) * colorMult
-        particleSystem.addParticles(x * width, y * height, 10)
         fluidSolver.uOld[index] += dx * velocityMult
         fluidSolver.vOld[index] += dy * velocityMult
 

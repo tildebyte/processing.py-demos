@@ -1,7 +1,7 @@
 '''
     A wireframe box with colored edges which expands and contracts according
     to time-of-day.
-
+    An original implementation of *hms* from http://www.gysin-vanetti.com/hms
     (C) Ben Alkov, 2014, licensed as APL 2.0 as part of processing.py
     (https://github.com/jdf/processing.py).
 '''

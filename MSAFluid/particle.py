@@ -33,13 +33,17 @@ class Particle(object):
     MOMENTUM = 0.5
     FLUID_FORCE = 0.6
 
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+    def __init__(self):
+        self.x = 0
+        self.y = 0
         self.vx = 0
         self.vy = 0
         self.alpha = random(0.3, 1)
         self.mass = random(0.1, 1)
+
+    def init(self, x, y):
+        self.x = x
+        self.y = y
 
     def update(self, invWidth, invHeight):
         # Only update if particle is visible.

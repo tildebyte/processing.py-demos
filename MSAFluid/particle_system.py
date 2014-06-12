@@ -29,40 +29,28 @@
 # *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from javax.media.opengl import GL
-from java.nio import ByteBuffer, ByteOrder
 from particle import Particle
 
 
 class ParticleSystem(object):
-
     def __init__(self, maxParticles=5000):
         self.maxParticles = maxParticles
         self.curIndex = 0
         self.particles = [Particle() for _ in range(self.maxParticles)]
 
-        # 2 coordinates per point, 2 points per particle (current and previous)
-        posArray = (ByteBuffer.allocateDirect(self.maxParticles * 2 * 2).
-                    order(ByteOrder.nativeOrder()).asFloatBuffer())
-        colArray = (ByteBuffer.allocateDirect(self.maxParticles * 3 * 2).
-                    order(ByteOrder.nativeOrder()).asFloatBuffer())
-
     def _fadeToColor(self, gl2, red, green, blue, speed):
         gl2.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
-        gl2.glColor4(red, green, blue, speed)
+        gl2.glColor4f(red, green, blue, speed)
         gl2.glBegin(gl2.GL_QUADS)
-        gl2.glVertex2(0, 0)
-        gl2.glVertex2(width, 0)
-        gl2.glVertex2(width, height)
-        gl2.glVertex2(0, height)
+        gl2.glVertex2f(0, 0)
+        gl2.glVertex2f(width, 0)
+        gl2.glVertex2f(width, height)
+        gl2.glVertex2f(0, height)
         gl2.glEnd()
 
-    def updateAndDraw(self, invWidth, invHeight, drawFluid):
-        # OPENGL Processing 2.0
-        # gl2 = beginPGL().gl.getGL2()
-        with beginPGL():
-            pgogl = PGraphicsOpenGL()
-            pjogl = PJOGL(pgogl)
-            gl2 = pjogl.gl.getGL2()
+    def updateAndDraw(self, invWidth, invHeight, drawFluid, fluidSolver):
+        with beginPGL() as pgl:
+            gl2 = pgl.gl.getGL2()
             gl2.glEnable(GL.GL_BLEND)  # Enable blending.
             if not drawFluid:
                 self._fadeToColor(gl2, 0, 0, 0, 0.05)
@@ -76,14 +64,13 @@ class ParticleSystem(object):
 
             # Start drawing points.
             gl2.glBegin(gl2.GL_LINES)
-            for i in range(self.maxParticles):
-                if self.particles[i].alpha > 0:
-                    self.particles[i].update(invWidth, invHeight)
+            for particle in self.particles:
+                if particle.alpha > 0:
+                    particle.update(invWidth, invHeight, fluidSolver)
                     # Use oldschool rendering.
-                    self.particles[i].drawOldSchool(gl2)
+                    particle.drawOldSchool(gl2)
             gl2.glEnd()
             gl2.glDisable(GL.GL_BLEND)
-        endPGL()
 
     def addParticle(self, x, y):
         self.particles[self.curIndex].init(x, y)
@@ -93,4 +80,4 @@ class ParticleSystem(object):
 
     def addParticles(self, x, y, count):
         for i in range(count):
-            addParticle(x + random(-15, 15), y + random(-15, 15))
+            self.addParticle(x + random(-15, 15), y + random(-15, 15))

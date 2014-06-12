@@ -1,16 +1,14 @@
-"""
+'''
 
  Demo of the MSAFluid library (www.memo.tv/msafluid_for_processing)
  Move mouse to add dye and forces to the fluid.
- Click mouse to turn off fluid rendering seeing only particles and their paths.
+ LEFT mouse turns off fluid rendering, showing only particles and paths.
+ RIGHT mouse turns off particles, showing only fluid rendering.
  Demonstrates feeding input into the fluid and reading data back (to update
  the particles).
- Also demonstrates using Vertex Arrays for particle rendering.
- Port to processing.py and Superfast Blur added
- (http://incubator.quasimondo.com/processing/superfast_blur.php)
- by Ben Alkov, 2014.
+ Port to processing.py by Ben Alkov, 2014.
 
-"""
+'''
 # * Copyright (c) 2008, 2009, Memo Akten, www.memo.tv
 # * *** The Mega Super Awesome Visuals Company ***
 # *  All rights reserved.
@@ -42,8 +40,6 @@
 # *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 add_library('MSAFluid')
-# from processing.opengl import *
-# from javax.media.opengl import *
 from particle_system import ParticleSystem
 
 FLUID_WIDTH = 120
@@ -51,13 +47,14 @@ invWidth = 0
 invHeight = 0
 fluidSolver = None
 particleSystem = None
-drawFluid = False
+drawFluid = True
+drawSparks = True
 imgFluid = None
 aspectRatio = 0
 
 
 def setup():
-    size(960, 640, P3D)
+    size(784, 484, OPENGL)
     invWidth = 1.0 / width
     invHeight = 1.0 / height
     aspectRatio = (width * invHeight) ** 2
@@ -89,14 +86,18 @@ def draw():
             imgFluid.pixels[i] = color(fluidSolver.r[i] * 2,
                                        fluidSolver.g[i] * 2,
                                        fluidSolver.b[i] * 2)
-        # imgFluid.pixels = fastBlur(imgFluid, 2)
         imgFluid.updatePixels()
         image(imgFluid, 0, 0, width, height)
-    particleSystem.updateAndDraw(invWidth, invHeight, drawFluid)
+    if drawSparks:
+        particleSystem.updateAndDraw(invWidth, invHeight,
+                                     drawFluid, fluidSolver)
 
 
 def mousePressed():
-    drawFluid = not drawFluid
+    if mouseButton == LEFT:
+        drawFluid = not drawFluid
+    elif mouseButton == RIGHT:
+        drawSparks = not drawSparks
 
 
 # Add force and dye to fluid, and create particles.
@@ -127,70 +128,3 @@ def addForce(x, y, dx, dy):
         particleSystem.addParticles(x * width, y * height, 10)
         fluidSolver.uOld[index] += dx * velocityMult
         fluidSolver.vOld[index] += dy * velocityMult
-
-
-def fastBlur(image, radius):
-    # Super Fast Blur v1.1
-    # by Mario Klingemann <http://incubator.quasimondo.com>
-    #
-    # Tip: Multiple invovations of this filter with a small
-    # radius will approximate a gaussian blur quite well.
-    pix = image.pixels
-    if radius < 1:
-        return
-    divisor = radius * 2 + 1
-    divisors = [i / divisor for i in range(256 * divisor)]
-    imgWidth = image.width
-    imgHeight = image.height
-    widthMinus = imgWidth - 1
-    heightMinus = imgHeight - 1
-    plane = [i for i in range(imgWidth * imgHeight)]
-    redPlane, greenPlane, bluePlane = plane, plane, plane
-    vsize = max(imgWidth, imgHeight)
-    vmin = [i for i in range(vsize)]
-    vmax = vmin
-    yWidth, yIndex = 0, 0
-
-    for y in range(imgHeight):
-        rsum, gsum, bsum = 0, 0, 0
-        for i in range(-radius, radius + 1):
-            pixel = pix[yIndex + min(widthMinus, max(i, 0))]
-            rsum += (pixel & 0xff0000) >> 16
-            gsum += (pixel & 0x00f00) >> 8
-            bsum += pixel & 0x0000f
-        for x in range(imgWidth):
-            redPlane[yIndex] = divisors[rsum]
-            greenPlane[yIndex] = divisors[gsum]
-            bluePlane[yIndex] = divisors[bsum]
-            if y == 0:
-                vmin[x] = min(x + radius + 1, widthMinus)
-                vmax[x] = max(x - radius, 0)
-            pixel1 = pix[yWidth + vmin[x]]
-            pixel2 = pix[yWidth + vmax[x]]
-            rsum += ((pixel1 & 0xff0000) - (pixel2 & 0xff0000)) >> 16
-            gsum += ((pixel1 & 0x00f00) - (pixel2 & 0x00f00)) >> 8
-            bsum += (pixel1 & 0x0000f) - (pixel2 & 0x0000f)
-            yIndex += 1
-        yWidth += imgWidth
-    for x in range(imgWidth):
-        rsum, gsum, bsum = 0, 0, 0
-        yPointer = -radius * imgWidth
-        for i in range(-radius, radius + 1):
-            yIndex = max(0, yPointer) + x
-            rsum += redPlane[yIndex]
-            gsum += greenPlane[yIndex]
-            bsum += bluePlane[yIndex]
-            yPointer += imgWidth
-        yIndex = x
-        for y in range(imgHeight):
-            pix[yIndex] = 0xff000000 | (divisors[rsum] << 16) | (divisors[gsum] << 8) | divisors[bsum]
-            if x == 0:
-                vmin[y] = min(y + radius + 1, heightMinus) * imgWidth
-                vmax[y] = max(y - radius, 0) * imgWidth
-            pixel1 = x + vmin[y]
-            pixel2 = x + vmax[y]
-            rsum += redPlane[pixel1] - redPlane[pixel2]
-            gsum += greenPlane[pixel1] - greenPlane[pixel2]
-            bsum += bluePlane[pixel1] - bluePlane[pixel2]
-            yIndex += imgWidth
-    return pix

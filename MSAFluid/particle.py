@@ -45,7 +45,7 @@ class Particle(object):
         self.x = x
         self.y = y
 
-    def update(self, invWidth, invHeight):
+    def update(self, invWidth, invHeight, fluidSolver):
         # Only update if particle is visible.
         if self.alpha == 0:
             return
@@ -54,9 +54,9 @@ class Particle(object):
         fluidIndex = (fluidSolver.getIndexForNormalizedPosition(
                       self.x * invWidth, self.y * invHeight))
         self.vx = (fluidSolver.u[fluidIndex] * width * self.mass *
-                   FLUID_FORCE + self.vx * MOMENTUM)
+                   Particle.FLUID_FORCE + self.vx * Particle.MOMENTUM)
         self.vy = (fluidSolver.v[fluidIndex] * height * self.mass *
-                   FLUID_FORCE + self.vy * MOMENTUM)
+                   Particle.FLUID_FORCE + self.vy * Particle.MOMENTUM)
 
         # Update position.
         self.x += self.vx
@@ -87,6 +87,6 @@ class Particle(object):
             self.alpha = 0
 
     def drawOldSchool(self, gl2):
-            gl2.glColor3(self.alpha, self.alpha, self.alpha)
-            gl2.glVertex2(self.x - self.vx, self.y - self.vy)
-            gl2.glVertex2(self.x, self.y)
+        gl2.glColor3f(self.alpha, self.alpha, self.alpha)
+        gl2.glVertex2f(self.x - self.vx, self.y - self.vy)
+        gl2.glVertex2f(self.x, self.y)

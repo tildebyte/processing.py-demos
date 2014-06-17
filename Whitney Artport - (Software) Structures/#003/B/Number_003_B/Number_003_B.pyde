@@ -22,6 +22,7 @@ def setup():
     circles = [Circle(random(width), height / NumCircles * i,
                       (random(2, 6)) * 10, random(-0.25, 0.25),
                       random(-0.25, 0.25), i) for i in range(NumCircles)]
+    strokeWeight(0.5)
     ellipseMode(CENTER)
     background(255)
 

@@ -46,5 +46,5 @@ class Circle(object):
         paY = y2 - h * (other.centerX - self.centerX) / diameter
         pbX = x2 - h * (other.centerY - self.centerY) / diameter
         pbY = y2 + h * (other.centerX - self.centerX) / diameter
-        stroke(255 - dist(paX, paY, pbX, pbY) * 4)
+        stroke(255 - dist(paX, paY, pbX, pbY) * 2)
         line(paX, paY, pbX, pbY)

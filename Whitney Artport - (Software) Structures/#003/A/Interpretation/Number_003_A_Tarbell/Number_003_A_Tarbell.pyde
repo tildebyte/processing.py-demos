@@ -11,33 +11,34 @@
 
     Port to Processing.py/Processing 2.0 by Ben Alkov 16 June 2014
 """
+from disc import Disc
+
 num = 100
-time = 0
 
 # Object array.
-# Disc[] discs
+discs = []
 
 
 # Initialization.
 def setup():
     size(500, 500)
     colorMode(RGB, 255)
-    ellipseMode(CENTER_RADIUS)
+    ellipseMode(RADIUS)
     background(0)
+    frameRate(30)
 
     # Make some discs.
-    discs = Disc[num]
     # Arrange in anti - collapsing circle.
-    for i in range(numi):
-        fx = 0.4 * width * cos(TWO_PI * i / num)
-        fy = 0.4 * width * sin(TWO_PI * i / num)
+    for i in range(num):
+        fx = 0.4 * width * cos(TAU * i / num)
+        fy = 0.4 * width * sin(TAU * i / num)
         x = random(width / 2) + fx
         y = random(width / 2) + fy
         r = 5 + random(45)
         bt = 1
         if random(100) < 50:
             bt = -1
-        discs[i] = Disc(i, x, y, bt * fx / 1000.0, bt * fy / 1000.0, r)
+        discs.append(Disc(i, x, y, bt * fx / 1000.0, bt * fy / 1000.0, r))
 
 
 # Main.
@@ -50,22 +51,3 @@ def draw():
         disc.drawSelf()
         disc.render(discs)
         disc.renderPxRiders()
-
-
-# Methods.
-def glowpoint(px, py):
-    for i in range(-2, 3):
-        for j in range(-2, 3):
-            a = (0.8 - i**2 * 0.1) - j**2 * 0.1
-            tpoint(px + i, py + j, '#FFFFFF', a)
-
-
-def tpoint(x1, y1, myc, a):
-    # Place translucent point.
-    c = get(x1, y1)
-    r = red(c) + (red(myc) - red(c)) * a
-    g = green(c) + (green(myc) - green(c)) * a
-    b = blue(c) + (blue(myc) - blue(c)) * a
-    nc = color(r, g, b)
-    stroke(nc)
-    point(x1, y1)

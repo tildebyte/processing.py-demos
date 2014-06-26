@@ -1,16 +1,19 @@
+from pxrider import PxRider
+
+
 # Disc object.
 class Disc(object):
     def __init__(self, index, centerX, centerY, vx, vy, destinationRadius):
         # Identifier.
-        self.id = index
+        self.index = index
 
         # Position.
         self.centerX = centerX
         self.centerY = centerY
 
         # Velocity.
-        vx = vx
-        vy = vy
+        self.vx = vx
+        self.vy = vy
 
         # Radius.
         self.destinationRadius = destinationRadius
@@ -18,7 +21,7 @@ class Disc(object):
 
         # Create pixel riders.
         maxRiders = 40
-        pxRiders = [PxRider() for _ in range(maxRiders)]
+        self.pxRiders = [PxRider() for _ in range(maxRiders)]
 
     def drawSelf(self):
         stroke(0, 50)
@@ -55,9 +58,9 @@ class Disc(object):
 
     def move(self):
         # Add velocity to position.
-        self.centerX += vx
-        self.centerY += vy
-        bound = width + self.radius + self.radius
+        self.centerX += self.vx
+        self.centerY += self.vy
+        bound = width + self.radius * 2
 
         # Bound check.
         if self.centerX + self.radius < 0:
@@ -74,5 +77,5 @@ class Disc(object):
             self.radius += 0.1
 
     def renderPxRiders(self):
-        for pxRider in pxRiders:
+        for pxRider in self.pxRiders:
             pxRider.move(self.centerX, self.centerY, self.radius)

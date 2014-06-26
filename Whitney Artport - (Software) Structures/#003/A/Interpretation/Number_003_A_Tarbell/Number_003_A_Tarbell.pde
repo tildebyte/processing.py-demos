@@ -20,9 +20,11 @@ Disc[] discs;
 // initialization
 void setup()
 {
-    size(500, 500);
+    size(500, 500, P2D);
+    colorMode(RGB,255);
     ellipseMode(RADIUS);
     background(0);
+    frameRate(30);
 
     // make some discs
     discs = new Disc[num];
@@ -95,7 +97,7 @@ class Disc
     }
 
     void drawSelf() {
-        stroke(128, 50);
+        stroke(0, 50);
         noFill();
         ellipse(x, y, r, r);
     }
@@ -176,7 +178,6 @@ class Disc
         PxRider() {
             t = random(TAU);
             vt = 0.0;
-            mycharge = 64.0;
         }
 
         void move(float x, float y, float r) {
@@ -193,14 +194,14 @@ class Disc
             // draw
             float px = x + r * cos(t);
             float py = y + r * sin(t);
-            // color c = get(int(px),int(py));
-            loadPixels();
-            color c = pixels[int(px) + int(py) * height];
+            color c = get(int(px),int(py));
+//            loadPixels();
+//            color c = pixels[int(px) + int(py) * height];
             if (brightness(c) > 48) {
                 glowpoint(px, py);
                 mycharge = 164;
             } else {
-                stroke(int(mycharge));
+                stroke(mycharge);
                 point(px, py);
                 mycharge *= 0.98;
             }
@@ -227,9 +228,9 @@ void tpoint(int x1, int y1, color myc, float a)
     int r, g, b;
     color c;
 
-    // c = get(x1, y1);
-    loadPixels();
-    c = pixels[x1 + y1 * height];
+    c = get(x1, y1);
+//    loadPixels();
+//    c = pixels[x1 + y1 * height];
 
     r = int(red(c) + (red(myc) - red(c)) * a);
     g = int(green(c) + (green(myc) - green(c)) * a);

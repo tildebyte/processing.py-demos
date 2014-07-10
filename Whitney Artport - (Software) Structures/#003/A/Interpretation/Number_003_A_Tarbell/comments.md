@@ -1,4 +1,4 @@
-from the [comments] on Tarbell's Structure #003A:
+From the [comments] on Tarbell's Structure #003A:
 
 Tarbell:
 The circles in this interpretation begin with a radius of 1 pixel and slowly increase to some arbitrary size (10-50 pixels). Circles are drawn with small moving points along the perimeter. The intersections are rendered as glowing orbs. The twinkling effect of the intersections was unintentional, but once discovered, emphasized with an irregular drawing technique. Glowing orbs are rendered ONLY when a perimeter point moves past the intersection point.

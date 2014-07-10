@@ -3,20 +3,20 @@ from pxrider import PxRider
 
 # Disc object.
 class Disc(object):
-    def __init__(self, index, centerX, centerY, vx, vy, destinationRadius):
+    def __init__(self, index, x, y, velocityX, velocityY, destRadius):
         # Identifier.
         self.index = index
 
         # Position.
-        self.centerX = centerX
-        self.centerY = centerY
+        self.x = x
+        self.y = y
 
         # Velocity.
-        self.vx = vx
-        self.vy = vy
+        self.velocityX = velocityX
+        self.velocityY = velocityY
 
         # Radius.
-        self.destinationRadius = destinationRadius
+        self.destRadius = destRadius
         self.radius = 0
 
         # Create pixel riders.
@@ -26,56 +26,56 @@ class Disc(object):
     def drawSelf(self):
         stroke(0, 50)
         noFill()
-        ellipse(self.centerX, self.centerY, self.radius, self.radius)
+        ellipse(self.x, self.y, self.radius, self.radius)
 
     def render(self, discs):
         # Find intersecting points with all ascending discs.
         for disc in discs:
             if disc.index > self.index:
                 # Find distance to other disc.
-                dx = disc.centerX - self.centerX
-                dy = disc.centerY - self.centerY
-                d = sqrt(dx**2 + dy**2)
+                distance = dist(disc.x, disc.y, self.x, self.y)
 
                 # Intersection test.
-                if d < (disc.radius + self.radius):
+                if distance < (disc.radius + self.radius):
                     # Complete containment test.
-                    if d > abs(disc.radius - self.radius):
+                    if distance > abs(disc.radius - self.radius):
                         # Find solutions.
-                        a = (self.radius**2 - disc.radius**2 + d**2) / (2 * d)
-                        p2x = self.centerX + a * (disc.centerX - self.centerX) / d
-                        p2y = self.centerY + a * (disc.centerY - self.centerY) / d
-                        h = sqrt(self.radius**2 - a**2)
-                        p3ax = p2x + h * (disc.centerY - self.centerY) / d
-                        p3ay = p2y - h * (disc.centerX - self.centerX) / d
-                        p3bx = p2x - h * (disc.centerY - self.centerY) / d
-                        p3by = p2y + h * (disc.centerX - self.centerX) / d
+                        a = ((self.radius**2 - disc.radius**2 + distance**2) /
+                             (2 * distance))
+                        p2x = self.x + a * (disc.x - self.x) / distance
+                        p2y = self.y + a * (disc.y - self.y) / distance
+                        hypotenuse = sqrt(self.radius**2 - a**2)
+                        p3ax = p2x + hypotenuse * (disc.y - self.y) / distance
+                        p3ay = p2y - hypotenuse * (disc.x - self.x) / distance
+                        p3bx = p2x - hypotenuse * (disc.y - self.y) / distance
+                        p3by = p2y + hypotenuse * (disc.x - self.x) / distance
 
-                        # p3a and p3B may be identical - ignore self case (for now).
+                        # p3a and p3B may be identical - ignore self case (for
+                        #   now).
                         stroke(255)
                         point(p3ax, p3ay)
                         point(p3bx, p3by)
 
     def move(self):
         # Add velocity to position.
-        self.centerX += self.vx
-        self.centerY += self.vy
+        self.x += self.velocityX
+        self.y += self.velocityY
         bound = width + self.radius * 2
 
         # Bound check.
-        if self.centerX + self.radius < 0:
-            self.centerX += bound
-        if self.centerX - self.radius > width:
-            self.centerX -= bound
-        if self.centerY + self.radius < 0:
-            self.centerY += bound
-        if self.centerY - self.radius > width:
-            self.centerY -= bound
+        if self.x + self.radius < 0:
+            self.x += bound
+        if self.x - self.radius > width:
+            self.x -= bound
+        if self.y + self.radius < 0:
+            self.y += bound
+        if self.y - self.radius > width:
+            self.y -= bound
 
         # Increase to destination radius.
-        if self.radius < self.destinationRadius:
+        if self.radius < self.destRadius:
             self.radius += 0.1
 
     def renderPxRiders(self):
         for pxRider in self.pxRiders:
-            pxRider.move(self.centerX, self.centerY, self.radius)
+            pxRider.move(self.x, self.y, self.radius)

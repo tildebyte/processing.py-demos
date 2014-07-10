@@ -6,7 +6,6 @@ class PxRider(object):
         self.deltaV = 0.0
         self.charge = 0
 
-    # Methods.
     def move(self, x, y, radius):
         # Add velocity to theta.
         self.theta = (self.theta + self.deltaV + PI) % TAU - PI

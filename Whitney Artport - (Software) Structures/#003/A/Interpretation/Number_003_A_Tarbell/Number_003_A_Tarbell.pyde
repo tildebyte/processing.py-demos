@@ -3,7 +3,7 @@
     circle has a different size and direction, but moves at the same slow
     rate.
 
-    Display the instantaneous intersections of the circles
+    Display the instantaneous intersections of the circles.
 
     Implemented by J. Tarbell <http://levitated.net>
     8 April 2004
@@ -13,10 +13,9 @@
 """
 from disc import Disc
 
-num = 100
-
 # Object array.
 discs = []
+num = 100
 
 
 # Initialization.

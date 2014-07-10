@@ -23,20 +23,21 @@ class Circle(object):
         self.centerX += self.xspeed
         self.centerY += self.yspeed
         if self.xspeed > 0 and self.centerX > width + self.radius:
-                self.centerX = -self.radius
+            self.centerX = -self.radius
         elif self.centerX < -self.radius:
-                self.centerX = width + self.radius
+            self.centerX = width + self.radius
         if self.yspeed > 0 and self.centerY > height + self.radius:
-                self.centerY = -self.radius
+            self.centerY = -self.radius
         elif self.centerY < -self.radius:
-                self.centerY = height + self.radius
+            self.centerY = height + self.radius
 
     def intersect(self, other):
         dx = self.centerX - other.centerX
         dy = self.centerY - other.centerY
         dSqr = dx**2 + dy**2
         diameter = sqrt(dSqr)
-        if diameter > self.radius + other.radius or diameter < abs(self.radius - other.radius):
+        if (diameter > self.radius + other.radius
+                or diameter < abs(self.radius - other.radius)):
             return  # no solution
         a = (self.rSqr - other.rSqr + dSqr) / (2 * diameter)
         h = sqrt(self.rSqr - a**2)

@@ -17,6 +17,7 @@ from disc import Disc
 discs = None
 
 # Number of passes for SandPainters to render.
+# Probably best not to tamper.
 Passes = 11
 NumDiscs = 100
 
@@ -24,7 +25,7 @@ def setup():
     size(700, 700)
     ellipseMode(RADIUS)
     smooth(4)
-    background(255)
+    background(216, 233, 255)
     frameRate(24)
 
     # Make 100 discs, arranged linearly.
@@ -32,7 +33,7 @@ def setup():
 
 
 def draw():
-    fill(255, 40)
+    fill(216, 233, 255, 40)
     rect(0, 0, width, height)
 
     # Move discs.

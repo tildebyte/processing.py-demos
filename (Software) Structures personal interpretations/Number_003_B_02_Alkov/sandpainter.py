@@ -3,6 +3,8 @@ from tpoint import tpoint
 
 # SandPainter object
 class SandPainter(object):
+    MaxG = 0.5
+
     def __init__(self):
         self.p_variable = random(1.0)
         self.color = random(234)
@@ -13,11 +15,11 @@ class SandPainter(object):
         tpoint(self.calc(x, otherX, self.p_variable),
                self.calc(y, otherY, self.p_variable),
                self.color, 0.11)
-        maxg = 0.5
-        self.g_variable += random(-0.050, 0.050)
         self.p_variable += random(-0.050, 0.050)
-        self.g_variable = constrain(self.g_variable, -maxg, maxg)
+        self.g_variable += random(-0.050, 0.050)
         self.p_variable = constrain(self.p_variable, 0, 1.0)
+        self.g_variable = constrain(self.g_variable,
+                                    -SandPainter.MaxG, SandPainter.MaxG)
         w = self.g_variable / 10.0
         for i in range(passes):
             tpoint(self.calc(x, otherX, self.p_variable + sin(i * w)),

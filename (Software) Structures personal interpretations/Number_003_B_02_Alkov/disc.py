@@ -5,14 +5,13 @@ from tpoint import tpoint
 # Disc object.
 class Disc(object):
     # SandPainters.
-    NumSands = 1
+    NumSands = 2
 
     def __init__(self, index):
         self.index = index
         self.x = random(width)
         self.y = random(height)
         self.velocityX = random(-1.0, 1.0)
-        # self.destRadius = 20 + random(20)
         self.radius = 20 + random(20)
 
         # Create sand painters.
@@ -25,13 +24,13 @@ class Disc(object):
                 # Find distance to other disc.
                 distance = dist(disc.x, disc.y, self.x, self.y)
 
-                # intersection test
+                # Intersection test.
                 if distance < (disc.radius + self.radius):
 
-                    # complete containment test
+                    # Complete containment test.
                     if distance > abs(disc.radius - self.radius):
 
-                        # find circle intersection solutions
+                        # Find circle intersection solutions.
                         a = ((self.radius**2 - disc.radius**2 + distance**2) /
                              (2 * distance))
                         p2x = self.x + a * (disc.x - self.x) / distance
@@ -47,10 +46,6 @@ class Disc(object):
                             sandpainter.render(p3ax, p3ay, p3bx, p3by, passes)
 
     def move(self):
-        # # Move radius towards destination radius.
-        # if self.radius < self.destRadius:
-        #     self.radius += 0.02
-
         # Add velocity to position.
         self.x += self.velocityX
         self.boundsCheck()

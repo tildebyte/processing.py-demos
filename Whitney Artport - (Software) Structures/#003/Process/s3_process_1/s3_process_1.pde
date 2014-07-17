@@ -4,7 +4,9 @@
 // Modified by Casey Reas
 
 
+
 Circle circleA, circleB;
+
 
 void setup()
 {

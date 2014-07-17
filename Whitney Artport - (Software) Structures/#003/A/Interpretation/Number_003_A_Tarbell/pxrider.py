@@ -1,6 +1,5 @@
 # Pixel Rider object.
 class PxRider(object):
-
     def __init__(self):
         self.theta = random(TAU)
         self.deltaV = 0.0
@@ -18,30 +17,32 @@ class PxRider(object):
         # Draw.
         px = x + radius * cos(self.theta)
         py = y + radius * sin(self.theta)
-        # color = get(px, py)
-        loadPixels()
-        color = pixels[int(px) + int(py) * height]
-        if brightness(color) > 48:
-            self.glowpoint(px, py)
+        screenColor = get(int(px), int(py))
+        # loadPixels()
+        # screenColor = pixels[int(py) * this.width + int(px)]
+        if brightness(screenColor) > 48:
+            PxRider.glowpoint(px, py)
             self.charge = 164
         else:
             stroke(self.charge)
             point(px, py)
             self.charge *= 0.98
 
-    def tpoint(x, y, myColor, trans):
-        # Place translucent point.
-        # color = get(x, y)
-        loadPixels()
-        color = pixels[x + y * height]
-        r = red(color) + (red(myColor) - red(color)) * trans
-        g = green(color) + (green(myColor) - green(color)) * trans
-        b = blue(color) + (blue(myColor) - blue(color)) * trans
-        stroke(color(r, g, b))
-        point(x, y)
-
-    def glowpoint(px, py):
+    @classmethod
+    def glowpoint(cls, px, py):
         for i in range(-2, 3):
             for j in range(-2, 3):
                 a = (0.8 - i**2 * 0.1) - j**2 * 0.1
-                self.tpoint(px + i, py + j, '#FFFFFF', a)
+                PxRider.tpoint(px + i, py + j, '#FFFFFF', a)
+
+    @classmethod
+    def tpoint(cls, x, y, myColor, trans):
+        # Place translucent point.
+        screenColor = get(int(x), int(y))
+        # loadPixels()
+        # screenColor = pixels[int(y) * this.width + int(x)]
+        r = red(screenColor) + (red(myColor) - red(screenColor)) * trans
+        g = green(screenColor) + (green(myColor) - green(screenColor)) * trans
+        b = blue(screenColor) + (blue(myColor) - blue(screenColor)) * trans
+        stroke(color(r, g, b))
+        point(x, y)

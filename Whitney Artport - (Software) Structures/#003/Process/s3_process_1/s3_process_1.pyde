@@ -11,7 +11,7 @@ circleB = None
 
 
 def setup():
-    size(300, 300)
+    size(800, 800)
     frameRate(30)
     circleA = Circle(150, 150, 50)
     circleB = Circle(150, 150, 60)
@@ -52,10 +52,10 @@ def intersect(circleA, circleB):
     pointAY = calc2(midpointY, '-', hyp, calc1(circleB.x, circleA.x, distance))
     pointBX = calc2(midpointX, '-', hyp, calc1(circleB.y, circleA.y, distance))
     pointBY = calc2(midpointY, '+', hyp, calc1(circleB.x, circleA.x, distance))
-    render(midpointX, midpointY, pointAX, pointAY, pointBX, pointBY)
+    renderIntersect(midpointX, midpointY, pointAX, pointAY, pointBX, pointBY)
 
 
-def render(midpointX, midpointY, pointAX, pointAY, pointBX, pointBY):
+def renderIntersect(midpointX, midpointY, pointAX, pointAY, pointBX, pointBY):
     fill(0)
     rect(midpointX, midpointY, 5, 5)
     ellipse(pointAX, pointAY, 10, 10)

@@ -13,6 +13,7 @@
 """
 from disc import Disc
 
+
 # Object array.
 discs = []
 num = 100
@@ -50,3 +51,18 @@ def draw():
         disc.drawSelf()
         disc.render(discs)
         disc.renderPxRiders()
+
+def boundsCheck(x, y, pad):
+    constrainedX = constrain(x, -pad, width + pad)
+    constrainedY = constrain(y, -pad, height + pad)
+    if constrainedX != x:
+        if x < 0:
+            return False
+        else:
+            x = True
+    if constrainedY != y:
+        if y < 0:
+            y = height + pad * 2
+        else:
+            y = -pad
+    return x, y

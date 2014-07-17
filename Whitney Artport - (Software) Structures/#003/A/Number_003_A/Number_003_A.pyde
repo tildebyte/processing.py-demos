@@ -21,9 +21,10 @@ circles = None
 
 def setup():
     size(800, 600)
-    circles = [Circle(random(width), height / NumCircles * i,
+    circles = [Circle(i, random(width), height / NumCircles * i,
                       (random(1, 6)) * 10, random(-1.0, 1.0),
-                      random(-1.0, 1.0), i) for i in range(NumCircles)]
+                      random(-1.0, 1.0))
+               for i in range(NumCircles)]
     strokeWeight(0.5)
     ellipseMode(CENTER)
     background(255)
@@ -35,5 +36,5 @@ def draw():
     for circle in circles:
         circle.update(circles)
         circle.move()
-        circle.makepoint()
+        circle.drawSelf()
     noFill()

@@ -20,16 +20,16 @@ Circle[] circles = new Circle[numCircle];
 void setup()
 {
   size(640, 480);
-  framerate(30);
+  frameRate(30);
   for(int i=0; i<numCircle; i++) {
     circles[i] = new Circle(random(width), random(height),
                             random(2, 6)*10, random(-1.25, 1.25), random(-1.25, 1.25), i);
   }
-  ellipseMode(CENTER_DIAMETER);
+  ellipseMode(CENTER);
 }
 
 
-void loop()
+void draw()
 {
   background(255);
 

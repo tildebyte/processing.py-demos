@@ -1,12 +1,12 @@
 class Circle(object):
     '''A circle object'''
 
-    def __init__(self, centerX, centerY, radius, xspeed, yspeed, index):
-        self.centerX = centerX
-        self.centerY = centerY
+    def __init__(self, index, x, y, radius, xspeed, yspeed):
+        self.index = index
+        self.x = x
+        self.y = y
         self.radius = radius
         self.rSqr = self.radius**2
-        self.index = index
         self.xspeed = xspeed
         self.yspeed = yspeed
 
@@ -15,36 +15,49 @@ class Circle(object):
             if circle.index != self.index:
                 self.intersect(circle)
 
-    def makepoint(self):
+    def drawSelf(self):
         stroke(0)
-        point(self.centerX, self.centerY)
+        point(self.x, self.y)
 
     def move(self):
-        self.centerX += self.xspeed
-        self.centerY += self.yspeed
-        if self.xspeed > 0 and self.centerX > width + self.radius:
-                self.centerX = -self.radius
-        elif self.centerX < -self.radius:
-                self.centerX = width + self.radius
-        if self.yspeed > 0 and self.centerY > height + self.radius:
-                self.centerY = -self.radius
-        elif self.centerY < -self.radius:
-                self.centerY = height + self.radius
+        self.x += self.xspeed
+        self.y += self.yspeed
+        if self.xspeed > 0 and self.x > width + self.radius:
+            self.x = -self.radius
+        elif self.x < -self.radius:
+            self.x = width + self.radius
+        if self.yspeed > 0 and self.y > height + self.radius:
+            self.y = -self.radius
+        elif self.y < -self.radius:
+            self.y = height + self.radius
 
     def intersect(self, other):
-        dx = self.centerX - other.centerX
-        dy = self.centerY - other.centerY
-        dSqr = dx**2 + dy**2
-        diameter = sqrt(dSqr)
-        if diameter > self.radius + other.radius or diameter < abs(self.radius - other.radius):
-            return  # no solution
-        a = (self.rSqr - other.rSqr + dSqr) / (2 * diameter)
-        h = sqrt(self.rSqr - a**2)
-        x2 = self.centerX + a * (other.centerX - self.centerX) / diameter
-        y2 = self.centerY + a * (other.centerY - self.centerY) / diameter
-        paX = x2 + h * (other.centerY - self.centerY) / diameter
-        paY = y2 - h * (other.centerX - self.centerX) / diameter
-        pbX = x2 - h * (other.centerY - self.centerY) / diameter
-        pbY = y2 + h * (other.centerX - self.centerX) / diameter
-        stroke(255 - dist(paX, paY, pbX, pbY) * 4)
-        line(paX, paY, pbX, pbY)
+        distance = dist(self.x, self.y, other.x, other.y)
+        if (distance > self.radius + other.radius
+                or distance < abs(self.radius - other.radius)):
+            return  # No solution.
+        a = (self.rSqr - other.rSqr + distance**2) / (2 * distance)
+        hyp = sqrt(self.rSqr - a**2)
+        midpointX = Circle.calc2(self.x, '+', a, Circle.calc1(other.x, self.x, distance))
+        midpointY = Circle.calc2(self.y, '+', a, Circle.calc1(other.y, self.y, distance))
+        pointAX = Circle.calc2(midpointX, '+', hyp, Circle.calc1(other.y, self.y, distance))
+        pointAY = Circle.calc2(midpointY, '-', hyp, Circle.calc1(other.x, self.x, distance))
+        pointBX = Circle.calc2(midpointX, '-', hyp, Circle.calc1(other.y, self.y, distance))
+        pointBY = Circle.calc2(midpointY, '+', hyp, Circle.calc1(other.x, self.x, distance))
+        Circle.renderIntersect(midpointX, midpointY, pointAX, pointAY, pointBX, pointBY)
+
+    @classmethod
+    def renderIntersect(cls, midpointX, midpointY, pointAX, pointAY, pointBX, pointBY):
+        stroke(255 - dist(pointAX, pointAY, pointBX, pointBY) * 4)
+        line(pointAX, pointAY, pointBX, pointBY)
+
+    @classmethod
+    def calc1(cls, first, second, distance):
+        return (first - second) / distance
+
+    @classmethod
+    def calc2(cls, first, operation, second, function):
+        if operation == '+':
+            return first + second * function
+        elif operation == '-':
+            return first - second * function

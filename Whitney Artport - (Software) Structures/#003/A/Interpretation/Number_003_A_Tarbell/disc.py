@@ -1,6 +1,5 @@
 from pxrider import PxRider
 
-
 # Disc object.
 class Disc(object):
     def __init__(self, index, x, y, velocityX, velocityY, destRadius):
@@ -60,17 +59,18 @@ class Disc(object):
         # Add velocity to position.
         self.x += self.velocityX
         self.y += self.velocityY
-        bound = width + self.radius * 2
+        boundWidth = width + self.radius * 2
+        boundHeight = height + self.radius * 2
 
         # Bound check.
         if self.x + self.radius < 0:
-            self.x += bound
+            self.x += boundWidth
         if self.x - self.radius > width:
-            self.x -= bound
+            self.x -= boundWidth
         if self.y + self.radius < 0:
-            self.y += bound
+            self.y += boundHeight
         if self.y - self.radius > width:
-            self.y -= bound
+            self.y -= boundHeight
 
         # Increase to destination radius.
         if self.radius < self.destRadius:

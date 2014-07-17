@@ -46,9 +46,9 @@ void setup()
   background(bgColor);
   smooth();
   colorMode(RGB, 255);
-  ellipseMode(CENTER_RADIUS);
+  ellipseMode(RADIUS);
   noStroke();
-  framerate(30);
+  frameRate(30);
   createCircles();
 }
 
@@ -273,7 +273,7 @@ class Circle
         vertex(x - xd*.75 + random(-1.0,1.0), y - yd*.75 + random(-1.0,1.0));
         vertex(circle[i].x, circle[i].y);
         endShape();
-        //line (x, y, circle[i].x, circle[i].y);
+        line (x, y, circle[i].x, circle[i].y);
       }
     }
     noStroke();

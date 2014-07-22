@@ -1,25 +1,41 @@
 class Circle(object):
-    NumCollisions = 0  # Number of collisions in one frame
-    NumConnections = 0  # Total number of collisions
-    GravityAngle = 1  # Angle to gravity center in degrees
-    GravityTheta = 1  # Angle to gravity center in radians
-    TotalCircles = 0
-    Gravity = 0
-    CXV = 0
-    CYV = 0
+    # Angle to gravity center (in radians).
+    GravityTheta = 0
+    # Strength of gravitational pull.
+    Gravity = 0.075
+    # Collision velocity along x axis.
+    xCollVel = 0
+    # Collision velocity along y axis.
+    yCollVel = 0
+    BgColor = color(0)
+    FgColor = color(0)
+    MaxDistance = 150
 
-    def __init__(self, index, x, y, xv, yv):
+    def __init__(self, index, x, y, xVel, yVel, TotalCircles):
+        # Circle global ID.
         self.index = index
+        # Circle x position.
         self.x = x
+        # Circle y position.
         self.y = y
+        # Circle radius.
         self.radius = 2
-        self.xv = xv
-        self.yv = yv
-        self.mightCollide = [1] * Circle.TotalCircles
-        self.hasCollided = [1] * Circle.TotalCircles
-        self.distances = [1] * Circle.TotalCircles
-        self.angles = [1] * Circle.TotalCircles
-        self.thetas = [1] * Circle.TotalCircles
+        # Current velocity along x-axis.
+        self.xVel = xVel
+        # Current velocity along y-axis.
+        self.yVel = yVel
+        # Storage for collisions which might happen.
+        self.mightCollide = [0] * TotalCircles
+        # Storage for collisions which happened.
+        self.didCollide = [0] * TotalCircles
+        # Storage for the distances between circles.
+        self.distances = [0] * TotalCircles
+        # Storage for the angle (in radians) between two connected circles.
+        self.thetas = [0] * TotalCircles
+        # Number of collisions in one frame.
+        self.numCollisions = 0
+        # Total number of collisions.
+        self.numConnections = 0
 
     def behave(self, circles, sketchXMid, sketchYMid):
         self.move()
@@ -28,7 +44,7 @@ class Circle(object):
         self.areWeConnected(circles)
         self.applyGravity(sketchXMid, sketchYMid)
         self.render(circles)
-        self.reset()
+        self.resetCollisions()
 
     def areWeClose(self, others):
         for other in others:
@@ -47,80 +63,69 @@ class Circle(object):
                                                    other.x, other.y)
                 if (self.distances[other.index]
                         < (self.radius + other.radius) * 1.1):
-                    self.hasCollided[other.index] = True
-                    other.hasCollided[self.index] = True
-                    self.angles[other.index] = Circle.findAngle(self.x, self.y,
-                                                                other.x, other.y)
-                    self.thetas[other.index] = (-(self.angles[other.index] * PI)) / 180.0
-                    Circle.CXV += (cos(self.thetas[other.index])
-                                   * ((other.radius + self.radius) / 2.0))
-                    Circle.CYV += (sin(self.thetas[other.index])
-                                   * ((other.radius + self.radius) / 2.0))
-                    Circle.NumCollisions += 1
-        if Circle.NumCollisions > 0:
-            self.xv = -Circle.CXV / Circle.NumCollisions
-            self.yv = -Circle.CYV / Circle.NumCollisions
-        Circle.CXV = 0.0
-        Circle.CYV = 0.0
+                    self.didCollide[other.index] = True
+                    other.didCollide[self.index] = True
+                    self.thetas[other.index] = self.findAngle(other.x, other.y)
+                    Circle.xCollVel += (cos(self.thetas[other.index])
+                                        * ((other.radius + self.radius) / 2.0))
+                    Circle.yCollVel += (sin(self.thetas[other.index])
+                                        * ((other.radius + self.radius) / 2.0))
+                    self.numCollisions += 1
+        if self.numCollisions > 0:
+            self.xVel = -Circle.xCollVel / self.numCollisions
+            self.yVel = -Circle.yCollVel / self.numCollisions
+        Circle.xCollVel = 0.0
+        Circle.yCollVel = 0.0
 
     def areWeConnected(self, others):
-        maxDistance = 150
         for other in others:
-            if (self.hasCollided[other.index]
-                    and self.index != other.index):
+            if (self.didCollide[other.index]
+                    and other.index != self.index):
                 self.distances[other.index] = dist(self.x, self.y,
                                                    other.x, other.y)
-                if self.distances[other.index] < maxDistance:
-                    self.angles[other.index] = Circle.findAngle(self.x, self.y,
-                                                                other.x, other.y)
-                    self.thetas[other.index] = (-(self.angles[other.index] * PI)) / 180.0
-                    Circle.CXV += cos(self.thetas[other.index]) * (self.radius / 8.0)
-                    Circle.CYV += sin(self.thetas[other.index]) * (self.radius / 8.0)
-                    Circle.NumConnections += 1
+                if self.distances[other.index] < Circle.MaxDistance:
+                    self.thetas[other.index] = self.findAngle(other.x, other.y)
+                    Circle.xCollVel += (cos(self.thetas[other.index])
+                                        * (other.radius / 8.0))
+                    Circle.yCollVel += (sin(self.thetas[other.index])
+                                        * (other.radius / 8.0))
+                    self.numConnections += 1
                 else:
-                    self.hasCollided[other.index] = False
-                    other.hasCollided[self.index] = False
-        if Circle.NumConnections > 0:
-            self.xv += (Circle.CXV / Circle.NumConnections) / 4.0
-            self.yv += (Circle.CYV / Circle.NumConnections) / 4.0
-        Circle.CXV = 0.0
-        Circle.CYV = 0.0
-        self.radius = Circle.NumConnections * .85 + 2
+                    self.didCollide[other.index] = False
+                    other.didCollide[self.index] = False
+        if self.numConnections > 0:
+            self.xVel += (Circle.xCollVel / self.numConnections) / 4.0
+            self.yVel += (Circle.yCollVel / self.numConnections) / 4.0
+        Circle.xCollVel = 0.0
+        Circle.yCollVel = 0.0
+        self.radius = self.numConnections * 0.85 + 2
 
     def applyGravity(self, sketchXMid, sketchYMid):
-        Circle.GravityAngle = Circle.findAngle(self.x, self.y,
-                                               sketchXMid, sketchYMid)
-        Circle.GravityTheta = (-(Circle.GravityAngle * PI)) / 180
-        self.xv += cos(Circle.GravityTheta) * Circle.Gravity
-        self.yv += sin(Circle.GravityTheta) * Circle.Gravity
+        Circle.GravityTheta = self.findAngle(sketchXMid, sketchYMid)
+        self.xVel += cos(Circle.GravityTheta) * Circle.Gravity
+        self.yVel += sin(Circle.GravityTheta) * Circle.Gravity
 
     def move(self):
-        self.x += self.xv
-        self.y += self.yv
+        self.x += self.xVel
+        self.y += self.yVel
 
     def render(self, others):
         noStroke()
-        fill(0, 25)
-        ellipse(self.x, self.y, self.radius, self.radius)
-        fill(0 + self.radius * 10, 50)
-        ellipse(self.x, self.y, self.radius * 0.5, self.radius * 0.5)
-        fill(0 + self.radius * 10)
-        ellipse(self.x, self.y, self.radius * 0.3, self.radius * 0.3)
-        if Circle.NumCollisions > 0:
+        self.drawMe(0, 25, 1)
+        self.drawMe(10, 50, 0.5)
+        self.drawMe(10, 255, 0.3)
+        if self.numCollisions > 0:
             noStroke()
-            fill(0, 25)
-            ellipse(self.x, self.y, self.radius, self.radius)
-            fill(0, 55)
-            ellipse(self.x, self.y, self.radius * 0.85, self.radius * 0.85)
-            fill(0)
-            ellipse(self.x, self.y, self.radius * 0.7, self.radius * 0.7)
+            self.drawMe(0, 25, 1)
+            self.drawMe(0, 55, 0.85)
+            self.drawMe(0, 255, 0.7)
         for other in others:
-            if (self.hasCollided[other.index]
+            if (self.didCollide[other.index]
                     and self.index != other.index):
                 with beginShape(LINE_LOOP):
                     xdist = self.x - other.x
                     ydist = self.y - other.y
-                    stroke(0, 150 - self.distances[other.index] * 2.0)
+                    stroke(Circle.FgColor, 150 - self.distances[other.index] * 2.0)
                     vertex(self.x, self.y)
                     vertex(self.x - xdist * 0.25 + random(-1.0, 1.0),
                            self.y - ydist * 0.25 + random(-1.0, 1.0))
@@ -129,14 +134,19 @@ class Circle(object):
                     vertex(self.x - xdist * 0.75 + random(-1.0, 1.0),
                            self.y - ydist * 0.75 + random(-1.0, 1.0))
                     vertex(other.x, other.y)
-                line (self.x, self.y, other.x, other.y);
+                line(self.x, self.y, other.x, other.y)
         noStroke()
 
-    @classmethod
-    def reset(cls):
-        Circle.NumCollisions = 0
-        Circle.NumConnections = 0
+    def resetCollisions(self):
+        self.numCollisions = 0
+        self.numConnections = 0
 
-    @classmethod
-    def findAngle(cls, x1, y1, x2, y2):
-        return 180 + (-(180 * (atan2(y1 - y2, x1 - x2))) / PI)
+    def drawMe(self, shade, alpha, factor):
+        r = self.radius * factor
+        fill(Circle.FgColor + self.radius * shade, alpha)
+        ellipse(self.x, self.y, r, r)
+
+    def findAngle(self, otherX, otherY):
+        t = atan2(self.y - otherY, self.x - otherX)
+        a = -(PI + (-t))  # PI radians
+        return a

@@ -24,14 +24,14 @@ int yMid           = yStage/2;        // y midpoint of applet
 int totalCircles   = 100;             // total number of circles
 Circle[] circle;                      // Circle object array
 
-float gravity;                        // Strength of gravitational pull
+float gravity = .075;;                        // Strength of gravitational pull
 float xGrav;                          // x point of center of gravity
 float yGrav;                          // y point of center of gravity
 float xGravOffset;
 
 float angleOffset;
-float initRadius;
-float maxDistance;
+float initRadius = 150;;
+float maxDistance = 150;;
 
 color bgColor;
 
@@ -65,11 +65,8 @@ void draw(){
 }
 
 void createCircles(){
-  gravity                        = .075;
-  maxDistance                    = 150;
   angleOffset                    = random(360);
   circle                         = new Circle[totalCircles];
-  initRadius                     = 150;
   for (int i=0; i<totalCircles; i++){
     float initAngle              = i * 3.6 + angleOffset + random(10);
     float initTheta              = (-((initAngle) * PI))/180;
@@ -124,7 +121,7 @@ class Circle
   float cxv;                    // Collision velocity along x axis
   float cyv;                    // Collision velocity along y axis
 
-  float gAngle;                 // Angle to gravity center in degrees
+  float gAngle;                 // Angle to gravity xcenter in degrees
   float gTheta;                 // Angle to gravity center in radians
   float gxv;                    // Gravity velocity along x axis
   float gyv;                    // Gravity velocity along y axis
@@ -179,8 +176,8 @@ class Circle
           hasCollided[i]               = true;
           circle[i].hasCollided[index] = true;
 
-          angles[i]                    = findAngle(x,y,circle[i].x,circle[i].y);
-          thetas[i]                    = (-(angles[i] * PI))/180.0;
+          angles[i]                    = findAngle(x,y,circle[i].x,circle[i].y); // degrees
+          thetas[i]                    = (-(angles[i] * PI))/180.0; // degrees -> -radians
           cxv                         += cos(thetas[i]) * ((circle[i].r + r)/2.0);
           cyv                         += sin(thetas[i]) * ((circle[i].r + r)/2.0);
           numCollisions               += 1;
@@ -203,8 +200,8 @@ class Circle
       if (hasCollided[i] && i != index){
         distances[i] = findDistance(x, y, circle[i].x, circle[i].y);
         if (distances[i] < maxDistance){
-          angles[i]                    = findAngle(x,y,circle[i].x,circle[i].y);
-          thetas[i]                    = (-(angles[i] * PI))/180.0;
+          angles[i]                    = findAngle(x,y,circle[i].x,circle[i].y); // degrees
+          thetas[i]                    = (-(angles[i] * PI))/180.0; // degrees -> -radians
           cxv                         += cos(thetas[i]) * (circle[i].r/8.0);
           cyv                         += sin(thetas[i]) * (circle[i].r/8.0);
           numConnections              += 1;
@@ -227,8 +224,8 @@ class Circle
 
 
   void applyGravity(){
-    gAngle        = findAngle(x,y,xMid,yMid);
-    gTheta        = (-(gAngle * PI))/180;
+    gAngle        = findAngle(x,y,xMid,yMid);  // degrees
+    gTheta        = (-(gAngle * PI))/180;  // degrees -> -radians
     gxv           = cos(gTheta) * gravity;
     gyv           = sin(gTheta) * gravity;
     xv += gxv;
@@ -296,7 +293,7 @@ float findAngle(float x1, float y1, float x2, float y2){
   float xd = x1 - x2;
   float yd = y1 - y2;
 
-  float t = atan2(yd,xd);
-  float a = (180 + (-(180 * t) / PI));
+  float t = atan2(yd,xd); // radians
+  float a = (180 + (-(180 * t) / PI));  // radians -> 180 + -degrees
   return a;
 }

@@ -17,22 +17,21 @@ from circle import Circle
 # ****************************************************************************
 # INITIALIZE VARIABLES
 # ****************************************************************************
-sketchX = 600  # self.x dimension of applet
-sketchY = 600  # self.y dimension of applet
-sketchXMid = sketchX / 2  # self.x midpoint of applet
-sketchYMid = sketchY / 2  # self.y midpoint of applet
-Circle.TotalCircles = 100  # total number of circles
-Circle.Gravity = 0.075  # Strength of gravitational pull
-circles = [Circle(i, 0, 0, 0, 0)  # Circle object list
-           for i in range(Circle.TotalCircles)]
-
+sketchX = 600  # x dimension of sketch.
+sketchY = 600  # y dimension of sketch.
+sketchXMid = sketchX / 2  # x midpoint of sketch.
+sketchYMid = sketchY / 2  # y midpoint of sketch.
+TotalCircles = 100  # Total number of circles.
+Circle.BgColor = color(255)
+Circle.FgColor = color(0)
+circles = None
 
 # ****************************************************************************
 # SETUP FUNCTION
 # ****************************************************************************
 def setup():
-    size(600, 600)
-    background(255)
+    size(sketchX, sketchY)
+    background(Circle.BgColor)
     smooth()
     colorMode(RGB, 255)
     ellipseMode(RADIUS)
@@ -45,28 +44,26 @@ def setup():
 # MAIN LOOP FUNCTION
 # ****************************************************************************
 def draw():
-    background(255)
+    background(Circle.BgColor)
     for circle in circles:
         circle.behave(circles, sketchXMid, sketchYMid)
 
 
 def createCircles():
     angleOffset = random(360)
-    for circle in circles:
-        circle.xPos, circle.yPos = initCirclePos(circle.index, angleOffset,
-                                                 random(10))
-        circle.xv = 0
-        circle.yv = 0
-
-
-def initCirclePos(index, angleOffset, rand):
     initRadius = 150
-    initAngle = index * 3.6 + angleOffset + rand
-    initTheta = (-((initAngle) * PI)) / 180
-    initxv = cos(initTheta) * initRadius
-    inityv = sin(initTheta) * initRadius
-    return sketchXMid + initxv, sketchYMid + inityv
+    circles = []
+    for i in range(TotalCircles):
+        xPos, yPos = initCirclePos(i, angleOffset, initRadius)
+        circles.append(Circle(i, xPos, yPos, 0, 0, TotalCircles))
 
 
-def mouseReleased():
+def initCirclePos(index, angleOffset, initRadius):
+    initTheta = radians(index * 3.6 + angleOffset + random(10))
+    initXVel = cos(initTheta) * initRadius
+    initYVel = sin(initTheta) * initRadius
+    return sketchXMid + initXVel, sketchYMid + initYVel
+
+
+def mousePressed():
     createCircles()

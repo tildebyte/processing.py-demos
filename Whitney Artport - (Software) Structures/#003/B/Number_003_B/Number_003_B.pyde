@@ -3,7 +3,9 @@
 
     A surface filled with one hundred medium to small sized circles. Each
     circle has a different size and direction, but moves at the same slow
-    rate. Display the aggregate intersections of the circles
+    rate.
+
+    Display the aggregate intersections of the circles
 
     Implemented by Casey Reas
     8 March 2004

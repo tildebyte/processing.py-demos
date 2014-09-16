@@ -1,4 +1,5 @@
 from pxrider import PxRider
+from util import checkBounds
 
 # Disc object.
 class Disc(object):
@@ -23,7 +24,7 @@ class Disc(object):
         self.pxRiders = [PxRider() for _ in range(maxRiders)]
 
     def drawSelf(self):
-        stroke(0, 50)
+        stroke(0x32000000)
         noFill()
         ellipse(self.x, self.y, self.radius, self.radius)
 
@@ -59,19 +60,7 @@ class Disc(object):
         # Add velocity to position.
         self.x += self.velocityX
         self.y += self.velocityY
-        boundWidth = width + self.radius * 2
-        boundHeight = height + self.radius * 2
-
-        # Bound check.
-        if self.x + self.radius < 0:
-            self.x += boundWidth
-        if self.x - self.radius > width:
-            self.x -= boundWidth
-        if self.y + self.radius < 0:
-            self.y += boundHeight
-        if self.y - self.radius > width:
-            self.y -= boundHeight
-
+        self.x, self.y = checkBounds(self.x, self.y, self.radius)
         # Increase to destination radius.
         if self.radius < self.destRadius:
             self.radius += 0.1

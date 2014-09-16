@@ -54,9 +54,9 @@ void setup()
   background(bgColor);
   smooth();
   colorMode(RGB, 255);
-  ellipseMode(CENTER_RADIUS);
+  ellipseMode(RADIUS);
   noStroke();
-  framerate(30);
+  frameRate(30);
   createCircles();
 }
 
@@ -64,7 +64,7 @@ void setup()
 // MAIN LOOP FUNCTION
 // ********************************************************************************
 
-void loop()
+void draw()
 {
   if (clear){
     background(bgColor);

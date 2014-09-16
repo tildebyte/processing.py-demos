@@ -1,16 +1,16 @@
-'''
+"""
 A surface filled with one hundred medium to small sized circles.
 Each circle has a different size and direction, but moves at the same
 slow rate.
 
-Display the instantaneous intersections of the circles
+Display the aggregate intersections of the circles.
 
 Implemented by Robert Hodgin <http://flight404.com>
-6 April 2004
+7 April 2004
 Processing v.68 <http://processing.org>
 
-Port to Processing.py/Processing 2.0 by Ben Alkov 17 July 2014
-'''
+Port to Processing.py/Processing 2.0 by Ben Alkov 22 July 2014
+"""
 from circle import Circle
 
 
@@ -18,16 +18,20 @@ from circle import Circle
 # INITIALIZE VARIABLES
 # ****************************************************************************
 Renderer = P3D
-sketchX = 600  # x dimension of sketch.
-sketchY = 600  # y dimension of sketch.
+sketchX = 900  # x dimension of sketch.
+sketchY = 500  # y dimension of sketch.
 sketchXMid = sketchX / 2  # x midpoint of sketch.
 sketchYMid = sketchY / 2  # y midpoint of sketch.
 TotalCircles = 100  # Total number of circles.
-GravityX = 0  # Location of gravity source.
-GravityY = 0  #   '
-Circle.BgColor = color(255)
-Circle.FgColor = color(0)
-circles = None
+Circle.BgColor = color(20)
+Circle.FgColor = color(255)
+circles = None  # Circle object array
+
+# BOOLEAN FOR TESTING PURPOSES
+clear = False
+timer = 0
+timerPause = 750
+timerMax = 775
 
 
 # ****************************************************************************
@@ -50,26 +54,39 @@ def setup():
 def draw():
     translate(sketchXMid, sketchYMid)
     rotateX(radians(180))
-    background(Circle.BgColor)
-    for circle in circles:
-        circle.behave(circles, GravityX, GravityY)
+    if clear:
+        background(Circle.BgColor)
+    dealWithTimer()
+    if timer < timerPause:
+        for circle in circles:
+            circle.behave(circles, Circle.GravityX, Circle.GravityY)
 
 
 def createCircles():
+    Circle.Gravity = random(0.005, 0.1)
+    Circle.GravityX = random(-50, 50)
+    Circle.GravityY = random(-50, 50)
+    Circle.GravityXOffset = random(1.0, 1.24)
+    Circle.MaxDistance = random(75, 150)
+    Circle.InitRadius = random(100, 140)
+    # Sets the initial point of rotation for the creation of the circles.
     angleOffset = random(TAU)
-    initRadius = 150
     circles = []
     for i in range(TotalCircles):
-        xPos, yPos = initCirclePos(i, angleOffset, initRadius)
+        xPos, yPos = initCirclePos(i, angleOffset, Circle.InitRadius)
         circles.append(Circle(i, xPos, yPos, 0, 0, TotalCircles))
 
 
 def initCirclePos(index, angleOffset, initRadius):
-    initTheta = index * (TAU * 0.01) + angleOffset + random(radians(10))
+    initTheta = index * (TAU * 0.01) + angleOffset
     initXVel = cos(initTheta) * initRadius
     initYVel = sin(initTheta) * initRadius
-    return initXVel + GravityX, initYVel + GravityY
+    return Circle.GravityX + initXVel, Circle.GravityY + initYVel
 
 
-def mousePressed():
-    createCircles()
+def dealWithTimer():
+    if timer > timerMax:
+        timer = 0
+        background(Circle.BgColor)
+        createCircles()
+    timer += 1

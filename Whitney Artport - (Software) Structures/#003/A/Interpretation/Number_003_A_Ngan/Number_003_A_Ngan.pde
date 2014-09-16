@@ -1,6 +1,3 @@
-
-Return to menu
-
 /*
 
    A surface filled with one hundred medium to small sized circles.
@@ -20,17 +17,15 @@ Circle[] cc;
 void setup()
 {
   size( 600, 600 );
-  framerate( 30 );
+  frameRate( 30 );
   cc = new Circle[100];
   for (int i=0; i<cc.length; i++) {
     cc[i] = new Circle( random(width), random(height), 15+random(20), i );
   }
-  ellipseMode(CENTER_DIAMETER);
-  rectMode(CENTER_DIAMETER);
   noFill();
 }
 
-void loop()
+void draw()
 {
   background(255);
 
@@ -38,14 +33,14 @@ void loop()
   fill(0);
 
   for (int i=0; i<cc.length; i++) {
-    cc[i].draw();
+    cc[i].render();
   }
 
   noFill();
   stroke(255);
 
   for (int i=0; i<cc.length; i++) {
-    cc[i].drawHair();
+    cc[i].renderHair();
   }
 }
 
@@ -95,16 +90,16 @@ class Circle {
     ac3 = random(0.5)-random(0.5);
   }
 
-  void draw() {
+  void render() {
     ellipse(x, y, d, d);
     move();
   }
 
-  void drawHair() {
+  void renderHair() {
 
     for (int i=0; i<hairs.length; i++) {
       hairs[i].updatePos();
-      hairs[i].draw();
+      hairs[i].render();
     }
   }
 
@@ -268,7 +263,7 @@ class Hair {
 
   }
 
-  void draw() {
+  void render() {
     line( parent.x+regX, parent.y+regY, x, y );
 
   }

@@ -34,7 +34,7 @@ int cTimer = 0;
 void setup()
 {
   size( 500, 500 );
-  framerate( 30 );
+  frameRate( 30 );
 
   gaph = 3;
   gapv = 3;
@@ -63,11 +63,11 @@ void setup()
 
   circles = new Circle[100];
 
-  ellipseMode( CENTER_DIAMETER );
+  ellipseMode( CENTER );
   noFill();
 }
 
-void loop()
+void draw()
 {
   background( 50 );
   stroke(255,255,255,50);
@@ -94,7 +94,7 @@ void loop()
   noFill();
 
   for (int i =0; i<cCounter; i++) {
-    circles[i].draw();
+    circles[i].render();
     circles[i].getGrid();
   }
 
@@ -152,7 +152,7 @@ class Circle
 
   }
 
-  void draw() {
+  void render() {
     move();
     ellipse( x, y, d, d );
   }

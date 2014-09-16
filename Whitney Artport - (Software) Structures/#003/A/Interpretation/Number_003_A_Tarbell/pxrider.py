@@ -1,3 +1,5 @@
+from util import checkBounds
+
 # Pixel Rider object.
 class PxRider(object):
     def __init__(self):
@@ -18,8 +20,6 @@ class PxRider(object):
         px = x + radius * cos(self.theta)
         py = y + radius * sin(self.theta)
         screenColor = get(int(px), int(py))
-        # loadPixels()
-        # screenColor = pixels[int(py) * this.width + int(px)]
         if brightness(screenColor) > 48:
             PxRider.glowpoint(px, py)
             self.charge = 164
@@ -36,13 +36,11 @@ class PxRider(object):
                 PxRider.tpoint(px + i, py + j, '#FFFFFF', a)
 
     @classmethod
-    def tpoint(cls, x, y, myColor, trans):
+    def tpoint(cls, x, y, myColor, opacity):
         # Place translucent point.
         screenColor = get(int(x), int(y))
-        # loadPixels()
-        # screenColor = pixels[int(y) * this.width + int(x)]
-        r = red(screenColor) + (red(myColor) - red(screenColor)) * trans
-        g = green(screenColor) + (green(myColor) - green(screenColor)) * trans
-        b = blue(screenColor) + (blue(myColor) - blue(screenColor)) * trans
+        r = red(screenColor) + (red(myColor) - red(screenColor)) * opacity
+        g = green(screenColor) + (green(myColor) - green(screenColor)) * opacity
+        b = blue(screenColor) + (blue(myColor) - blue(screenColor)) * opacity
         stroke(color(r, g, b))
         point(x, y)

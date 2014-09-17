@@ -13,19 +13,22 @@ from getPaletteCSV import getPaletteCSV
 from top import Top
 
 Top.Palette = getPaletteCSV('Less-Angry_Rainbow_hex.csv')
+Top.StrokeWeight = 2
+Top.Radius = 1.5
 top = None
 
 
 def setup():
-    size(800, 800)
+    size(800, 800, OPENGL)
+    frameRate(60)
     # Initial position in the center of the screen.
     top = Top(width / 2, height / 2)
-    strokeWeight(1)
+    ellipseMode(RADIUS)
     smooth()
 
 
 def draw():
-    fill(255, 10)
+    fill(0, 10)
     noStroke()
     rect(0, 0, width, height)
     top.move(width, height, radians(frameCount))

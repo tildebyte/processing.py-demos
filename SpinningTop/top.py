@@ -3,6 +3,8 @@ class Top(object):
     Palette = []
     MinDelta = 0.5
     MaxDelta = 1
+    StrokeWeight = 1
+    Radius = 0.5
 
     def __init__(self, x, y):
         self.pathX = x
@@ -55,9 +57,10 @@ class Top(object):
         tipColor = Top.getColor(self.findAngle('tip'))
         handColor = Top.getColor(self.findAngle('hand'))
         fill(tipColor)
-        ellipse(self.tipX, self.tipY, 3, 3)
+        ellipse(self.tipX, self.tipY, Top.Radius, Top.Radius)
         fill(handColor)
-        ellipse(self.handX, self.handY, 3, 3)
+        ellipse(self.handX, self.handY, Top.Radius, Top.Radius)
+        strokeWeight(Top.StrokeWeight)
         stroke(lerpColor(tipColor, handColor, 0.5))
         line(self.tipX, self.tipY, self.handX, self.handY)
 
@@ -65,17 +68,17 @@ class Top(object):
     def drawMeNot(self):
         noStroke()
         fill(0, 0, 255)
-        ellipse(self.pathX, self.pathY, 3, 3)
+        ellipse(self.pathX, self.pathY, Top.Radius, Top.Radius)
         fill(0, 255, 0)
-        ellipse(self.tipX, self.tipY, 3, 3)
+        ellipse(self.tipX, self.tipY, Top.Radius, Top.Radius)
         fill(255, 0, 0)
-        ellipse(self.handX, self.handY, 3, 3)
+        ellipse(self.handX, self.handY, Top.Radius, Top.Radius)
 
     @classmethod
-    def getColor(cls, index):
+    def getColor(cls, angle):
         # Map the range of angles to the range of the entire palette.
         #         We retrieve the color as rgb.
-        r, g, b = Top.Palette[int(map(index, 0, TAU, 0, 817))].rgb
+        r, g, b = Top.Palette[int(map(angle, 0, TAU, 0, 945))].rgb
 
         # Convert color elements from `float` to `int`.
         return color(r * 255, g * 255, b * 255)

@@ -26,9 +26,10 @@ from rectcallback import RectCallback
 
 
 def setup():
-    size(800, 800)
+    size(512, 512)
     util.centerX = width / 2
     util.centerY = height / 2
+    frameRate(30)
     H.init(this).background(0xff595E6E)  # #595E6E
     smooth()
     util.colorfield = (HColorField(width, height)
@@ -47,3 +48,6 @@ def setup():
 
 def draw():
     H.drawStage()
+    saveFrame('C:/Users/IBM_ADMIN/Documents/frames/####.tif')
+    if frameCount == 900:
+        exit()

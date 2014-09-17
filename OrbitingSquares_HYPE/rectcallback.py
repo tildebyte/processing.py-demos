@@ -16,7 +16,7 @@ class RectCallback(HCallback):
         drawable.strokeWeight(2)\
                 .stroke(0xff000000, 196)\
                 .fill(0xff000000, 100)\
-                .size(random(35, 60))\
+                .size(random(22, 38))\
                 .rounding(2)\
                 .rotation(random(360))\
                 .loc(creationX, creationY)\

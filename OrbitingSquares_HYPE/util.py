@@ -22,7 +22,7 @@ def positionOnOrbit():
     angle = random(TAU)
     # `randint` slightly offsets the position so we don't end up with the
     # visible HRects orbiting on *exact* circles.
-    radius = chooseOrbit() + randint(0, 35)
+    radius = chooseOrbit() + randint(0, 22)
     createX = centerX + (cos(angle) * radius)  # `angle` *must* be radians.
     createY = centerY + (sin(angle) * radius)  #
     return createX, createY
@@ -34,13 +34,13 @@ def chooseOrbit():
     """
     chance = random(1)
     if chance < 0.18:
-        return 100
+        return 64
     elif chance < 0.50:
-        return 200
+        return 128
     elif chance < 0.78:
-        return 325
+        return 208
     elif chance < 1.0:
-        return 450
+        return 288
 
 
 def applyRotation(obj, speed, tolerance):

@@ -11,13 +11,14 @@ Processing v.68 <http://processing.org>
 
 Port to Processing.py/Processing 2.0 by Ben Alkov 29 August - 5 September 2014
 '''
-
 from circle import Circle
 
 
 circles = []
 
+
 def setup():
+    global circles
     size(600, 600)
     frameRate(30)
     noFill()

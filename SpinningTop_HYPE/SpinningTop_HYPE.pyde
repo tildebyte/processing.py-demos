@@ -29,6 +29,7 @@ top = None
 
 
 def setup():
+    global top
     size(512, 512, OPENGL)
     frameRate(30)
     H.init(this).background(0xff000000)
@@ -44,6 +45,6 @@ def setup():
 def draw():
     top.update(width, height, radians(frameCount))
     H.drawStage()
-    saveFrame('C:/Users/IBM_ADMIN/Documents/frames/####.tif')
-    if frameCount == 900:
-        exit()
+    # saveFrame('C:/Users/IBM_ADMIN/Documents/frames/####.tif')
+    # if frameCount == 900:
+    #     exit()

@@ -1,4 +1,4 @@
-"""
+'''
 A surface filled with one hundred medium to small sized circles.
 Each circle has a different size and direction, but moves at the same
 slow rate.
@@ -10,7 +10,7 @@ Implemented by Robert Hodgin <http://flight404.com>
 Processing v.68 <http://processing.org>
 
 Port to Processing.py/Processing 2.0 by Ben Alkov 22 July 2014
-"""
+'''
 from circle import Circle
 
 
@@ -63,6 +63,7 @@ def draw():
 
 
 def createCircles():
+    global circles
     Circle.Gravity = random(0.005, 0.1)
     Circle.GravityX = random(-50, 50)
     Circle.GravityY = random(-50, 50)
@@ -85,6 +86,7 @@ def initCirclePos(index, angleOffset, initRadius):
 
 
 def dealWithTimer():
+    global timer
     if timer > timerMax:
         timer = 0
         background(Circle.BgColor)

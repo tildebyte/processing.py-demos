@@ -1,16 +1,18 @@
 from ball import Ball
 
-NUM_BALLS = 90
-Balls = []
+
+NumBalls = 90
+Balls = None
 framecounter = 0
 save = False
 
 
 def setup():
+    global Balls
     size(800, 600, P2D)
-    # smooth(2)
     background(10)
-    initialize()
+    Balls = [Ball(i)
+             for i in range(NumBalls)]
 
 
 def draw():
@@ -22,20 +24,15 @@ def draw():
         ball.run(Balls)
     if save:
         if frameCount % 1 == 0 and frameCount < framecounter + (240 * 3):
-            saveFrame("image-####.tif")
+            saveFrame("frame####.tif")
 
 
 def mouseReleased():
     background(10)
-    initialize()
-
-
-def initialize():
-    Balls = []
-    for i in range(NUM_BALLS):
-        Balls.append(Ball(i))
+    setup()
 
 
 def keyPressed():
+    global save, framecounter
     framecounter = frameCount
     save = not save

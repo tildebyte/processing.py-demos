@@ -6,7 +6,6 @@ from tpoint import tpoint
 class Disc(object):
     # SandPainters.
     NumSands = 1
-
     # Display flag.
     ShowStructure = False
 
@@ -17,7 +16,6 @@ class Disc(object):
         self.velocityX = random(-1.0, 1.0)
         self.destRadius = 20 + random(20)
         self.radius = 1.0
-
         # Create sand painters.
         self.sandpainters = [SandPainter() for _ in range(Disc.NumSands)]
 
@@ -32,13 +30,10 @@ class Disc(object):
             if disc.index > self.index:
                 # Find distance to other disc.
                 distance = dist(disc.x, disc.y, self.x, self.y)
-
                 # intersection test
                 if distance < (disc.radius + self.radius):
-
                     # complete containment test
                     if distance > abs(disc.radius - self.radius):
-
                         # find circle intersection solutions
                         a = ((self.radius**2 - disc.radius**2 + distance**2) /
                              (2 * distance))
@@ -49,7 +44,6 @@ class Disc(object):
                         p3ay = p2y - hypotenuse * (disc.x - self.x) / distance
                         p3bx = p2x - hypotenuse * (disc.y - self.y) / distance
                         p3by = p2y + hypotenuse * (disc.x - self.x) / distance
-
                         if Disc.ShowStructure:
                             stroke(255)
                             point(p3ax, p3ay)
@@ -61,7 +55,6 @@ class Disc(object):
                             tpoint((p3ax + 1), p3ay, 0, 0.21)
                             tpoint((p3bx - 1), p3by, 255, 0.21)
                             tpoint((p3bx + 1), p3by, 0, 0.21)
-
                         # Draw SandPainters.
                         for sandpainter in self.sandpainters:
                             sandpainter.render(p3ax, p3ay, p3bx, p3by, passes)

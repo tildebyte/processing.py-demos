@@ -1,5 +1,5 @@
 '''
-    `draw()` loop callback for the invisible parent `HGroup`s.
+`draw()` loop callback for the invisible parent `HGroup`s.
 '''
 from hype.core.util import H
 from hype.core.interfaces import HCallback

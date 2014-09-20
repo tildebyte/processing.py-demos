@@ -1,43 +1,38 @@
-"""
+'''
 OpenProcessing Tweak of *@*http:#www.openprocessing.org/sketch/153544*@*
-"""
+'''
 
-from ball import Ball
+from __future__ import division
+from ball import (Ball)
 
-balls = []
+
+balls = None
+NumBalls = 500  # The number of lines.
+NumSources = 7  # The number of gravity points.
 Sources = None
 Ball.Radius = 200
 
 
 def setup():
+    global Sources, balls
     size(600, 600)
-    # frameRate(24)
+    frameRate(24)
     background(255)
     strokeWeight(0.5)
     noFill()
-    numBalls = 500  # The number of lines.
-    numSources = 7  # The number of gravity points.
-
     # Gravity points initialize.
-    # Sources = [PVector(width / 2 + Ball.Radius * cos(i * TAU / numSources),
-    #                    height / 2 + Ball.Radius * sin(i * TAU / numSources))
-    #            for i in range(numSources)]
-    Sources = [PVector(int(random(width)),
-                       int(random(height)))
-               for i in range(numSources)]
-    print(Sources)
+    Sources = [PVector(width / 2 + Ball.Radius * cos(i * TAU / NumSources),
+                       height / 2 + Ball.Radius * sin(i * TAU / NumSources))
+               for i in range(NumSources)]
     # Balls initialize.
-    for i in range(numBalls):
-        rnd = random(0, TAU)
-        balls.append(Ball(PVector(random(3, 15) * cos(rnd),
-                                  random(3, 15) * sin(rnd)),
-                          Sources))
+    balls = [Ball(random(0, TAU))
+             for _ in range(NumBalls)]
 
 
 def draw():
-    # fadeToWhite(175)
+    fadeToWhite(50)
     for ball in balls:
-        ball.reset(Sources)
+        ball.setSource(Sources)
         ball.move()
         ball.display()
     with pushStyle():

@@ -1,6 +1,5 @@
 from traer.physics import ParticleSystem
-from traer.physics import Particle
-from traer.physics import Vector3D
+
 
 angNoise = None
 radiusNoise = None
@@ -15,15 +14,13 @@ gridMidY = (gridSizeY / 2.0)
 moverX = None
 moverY = None
 
+
 def setup():
+    global angNoise, radiusNoise, particles, physics, moverX, moverY
     size(500, 300)
     smooth()
     frameRate(24)
     strokeCap(4)
-    restart()
-
-
-def restart():
     background(255)
     angNoise = random(10)
     radiusNoise = random(10)
@@ -38,7 +35,6 @@ def restart():
                                        y * forceHeight, 0)
                   for x in range(gridSizeX)]
                  for y in range(gridSizeY)]
-
     for particleList in particles:
         for particle in particleList:
             if particleList.index(particle) == 0:
@@ -58,6 +54,7 @@ def clearBackground():
 
 
 def draw():
+    global angNoise, radiusNoise, radius, angle, moverX, moverY
     physics.tick(0.15)
     if frameCount % 100 == 0:
         moverX = int(random(gridSizeX))
@@ -93,5 +90,6 @@ def draw():
                     curveVertex(particleList[index].position().x(),
                                 particleList[index].position().y())
 
+
 def mousePressed():
-    restart()
+    setup()

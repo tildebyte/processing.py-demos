@@ -20,12 +20,15 @@ class Top(object):
         self.tipY = 1
         self.handX = 1
         self.handY = 1
-        self.tipDrawable = HEllipse(Top.Radius).noStroke()\
-                                      .anchorAt(H.CENTER)
-        self.handDrawable = HEllipse(Top.Radius).noStroke()\
-                                      .anchorAt(H.CENTER)
-        self.lineDrawable = HPath().strokeWeight(Top.StrokeWeight)\
-                                   .strokeCap(ROUND)
+        self.tipDrawable = (HEllipse(Top.Radius)
+                            .noStroke()
+                            .anchorAt(H.CENTER))
+        self.handDrawable = (HEllipse(Top.Radius)
+                             .noStroke()
+                             .anchorAt(H.CENTER))
+        self.lineDrawable = (HPath()
+                             .strokeWeight(Top.StrokeWeight)
+                             .strokeCap(ROUND))
 
     def update(self, width, height, rads):
         # Calculate position.

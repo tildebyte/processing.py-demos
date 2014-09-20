@@ -1,5 +1,5 @@
 '''
-    `draw()` loop callback for the visible squares.
+`draw()` loop callback for the visible squares.
 '''
 from hype.core.util import H
 from hype.core.interfaces import HCallback

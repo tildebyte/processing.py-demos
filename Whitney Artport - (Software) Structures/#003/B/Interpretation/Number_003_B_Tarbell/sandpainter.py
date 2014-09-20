@@ -27,5 +27,6 @@ class SandPainter(object):
                    self.calc(y, otherY, self.p_variable - sin(i * w)),
                    self.color, 0.1 - i / 110)
 
-    def calc(self, coord, otherCoord, p):
+    @staticmethod
+    def calc(coord, otherCoord, p):
         return otherCoord + (coord - otherCoord) * sin(p)

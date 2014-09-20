@@ -1,53 +1,18 @@
-from hype.core.util import H
-from hype.core.util import HBundle
-from hype.core.util import HCapture
-from hype.core.util import HColors
-from hype.core.util import HConstants
-from hype.core.behavior import HBehavior
-from hype.core.behavior import HBehaviorRegistry
-from hype.core.behavior import HTrigger
-from hype.core.collection import HLinkedHashSet
-from hype.core.collection import HLinkedList
-from hype.core.collection import HNode
+from hype.core.util import H, HBundle, HCapture, HColors, HConstants
+from hype.core.behavior import HBehavior, HBehaviorRegistry, HTrigger
+from hype.core.collection import HLinkedHashSet, HLinkedList, HNode
 from hype.core.colorist import HColorist
-from hype.core.drawable import HDrawable
-from hype.core.drawable import HDrawable3D
-from hype.core.drawable import HStage
-from hype.core.interfaces import HCallback
-from hype.core.interfaces import HDirectable
-from hype.core.interfaces import HHittable
-from hype.core.interfaces import HImageHolder
-from hype.core.interfaces import HLocatable
-from hype.core.interfaces import HRotatable
+from hype.core.drawable import HDrawable, HDrawable3D, HStage
+from hype.core.interfaces import (HCallback, HDirectable, HHittable,
+                                  HImageHolder, HLocatable, HRotatable)
 from hype.core.layout import HLayout
-from hype.core.util import HMath
-from hype.core.util import HMouse
-from hype.core.util import HVector
-from hype.core.util import HWarnings
-from hype.extended.behavior import HFollow
-from hype.extended.behavior import HMagneticField
-from hype.extended.behavior import HOscillator
-from hype.extended.behavior import HRandomTrigger
-from hype.extended.behavior import HRotate
-from hype.extended.behavior import HSwarm
-from hype.extended.behavior import HTimer
-from hype.extended.behavior import HTween
-from hype.extended.behavior import HVelocity
-from hype.extended.colorist import HColorField
-from hype.extended.colorist import HColorPool
-from hype.extended.colorist import HColorTransform
-from hype.extended.colorist import HPixelColorist
-from hype.extended.drawable import HBox
-from hype.extended.drawable import HCanvas
-from hype.extended.drawable import HEllipse
-from hype.extended.drawable import HGroup
-from hype.extended.drawable import HImage
-from hype.extended.drawable import HPath
-from hype.extended.drawable import HRect
-from hype.extended.drawable import HShape
-from hype.extended.drawable import HSphere
-from hype.extended.drawable import HText
-from hype.extended.layout import HGridLayout
-from hype.extended.layout import HShapeLayout
-from hype.extended.util import HDrawablePool
-from hype.extended.util import HVertex
+from hype.core.util import HMath, HMouse, HVector, HWarnings
+from hype.extended.behavior import (HFollow, HMagneticField, HOscillator,
+                                    HRandomTrigger, HRotate, HSwarm, HTimer,
+                                    HTween, HVelocity)
+from hype.extended.colorist import (HColorField, HColorPool, HColorTransform,
+                                    HPixelColorist)
+from hype.extended.drawable import (HBox, HCanvas, HEllipse, HGroup, HImage,
+                                    HPath, HRect, HShape, HSphere, HText)
+from hype.extended.layout import HGridLayout, HShapeLayout
+from hype.extended.util import HDrawablePool, HVertex

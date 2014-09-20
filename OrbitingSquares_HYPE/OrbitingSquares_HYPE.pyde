@@ -1,17 +1,17 @@
 # add_library('hype')
 '''
-    1. One hundred `HRect`
-    2. Of randomly-selected size
-    3. Each having semi-tranparent fill and stroke
-    4. Each colored according to an underlying `HColorField`
-    5. Each rotating around its own center with a randomly-selected speed and
-       direction
-    6. Randomly distributed around the circumference of
-    7. One of several concentric circles
-    8. All squares rotating at a randomly-selected speed and direction around
-       a common center point
+1. One hundred `HRect`
+2. Of randomly-selected size
+3. Each having semi-tranparent fill and stroke
+4. Each colored according to an underlying `HColorField`
+5. Each rotating around its own center with a randomly-selected speed and
+   direction
+6. Randomly distributed around the circumference of
+7. One of several concentric circles
+8. All squares rotating at a randomly-selected speed and direction around
+   a common center point
 
-    Implementation by Ben Alkov 7-12 August 2014
+Implementation by Ben Alkov 7-12 August 2014
 
 '''
 from hype.core.util import H
@@ -48,6 +48,6 @@ def setup():
 
 def draw():
     H.drawStage()
-    saveFrame('C:/Users/IBM_ADMIN/Documents/frames/####.tif')
-    if frameCount == 900:
-        exit()
+    # saveFrame('C:/Users/IBM_ADMIN/Documents/frames/####.tif')
+    # if frameCount == 900:
+    #     exit()

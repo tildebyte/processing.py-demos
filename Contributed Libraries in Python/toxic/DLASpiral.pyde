@@ -9,6 +9,8 @@ isOctreeVisible = True
 
 
 def setup():
+    global dla
+    global listener
     size(640, 480, P3D)
     # compute spiral key points (every 45 degrees)
     points = []
@@ -26,7 +28,6 @@ def setup():
     guides = DLAGuideLines()
     guides.addCurveStrip(Spline3D(points).computeVertices(8))
     # create DLA 3D simulation space 128 units wide (cubic)
-    global dla
     dla = DLA(128)
     # use default configuration
     dla.setConfig(DLAConfiguration())
@@ -35,7 +36,6 @@ def setup():
     # set leaf size of octree
     dla.getParticleOctree().setMinNodeSize(1)
     # add a listener for simulation events
-    global listener
     listener = DLAListener()
     dla.addListener(listener)
     textFont(createFont("SansSerif", 12))
@@ -81,10 +81,10 @@ def drawOctree(node, doShowGrid, col):
 def drawBox(node):
     noFill()
     stroke(0, 24)
-    pushMatrix()
-    translate(node.x, node.y, node.z)
-    box(node.getSize())
-    popMatrix()
+    with pushMatrix():
+        ## BROKEN - Can't convert args to float
+        translate(node.x, node.y, node.z)
+        box(node.getSize())
 
 
 def keyPressed():
@@ -96,16 +96,21 @@ def keyPressed():
     if key == 'o':
         isOctreeVisible = not isOctreeVisible
     if key == 's':
-        listener.save()
+        listener.save(dla)
 
 
 class DLAListener(DLAEventAdapter):
 
+    def __init__(self):
+        pass
+
     # self method will be called when all guide segments
     # have been processed
-    def dlaAllSegmentsProcessed(dla):
+    @staticmethod
+    def dlaAllSegmentsProcessed(thisDLA):
         println("all done, saving...")
-        save()
+        save(thisDLA)
 
-    def save():
-        dla.save(sketchPath("spiral.dla"), False)
+    @staticmethod
+    def save(thisDLA):
+        thisDLA.save(sketchPath("spiral.dla"), False)

@@ -6,7 +6,8 @@ class Ball(object):
         self.origin = PVector(random(Ball.EdgeBuffer, width - Ball.EdgeBuffer),
                               random(Ball.EdgeBuffer, height - Ball.EdgeBuffer))
         self.radius = random(50.0, 150.0)
-        self.location = PVector(self.origin.x + self.radius, self.origin.y)
+        self.location = PVector(self.origin.x + self.radius,
+                                self.origin.y)
         if random(1) > 0.5:
             self.direction = -1
         else:
@@ -22,8 +23,12 @@ class Ball(object):
         self.lineBetween(balls)
 
     def move(self):
-        self.location.x = self.origin.x + sin(self.theta + self.offset) * self.radius
-        self.location.y = self.origin.y + cos(self.theta + self.offset) * self.radius
+        self.location.x = (self.origin.x
+                           + sin(self.theta + self.offset)
+                           * self.radius)
+        self.location.y = (self.origin.y
+                           + cos(self.theta + self.offset)
+                           * self.radius)
         # 0.02615 is sine of 1.5 degrees
         self.theta += (0.02615 * self.direction)
 

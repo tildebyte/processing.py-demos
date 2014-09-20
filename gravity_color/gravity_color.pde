@@ -13,7 +13,7 @@ PVector cPos;
 
 
 void setup() {
-  // frameRate(24);
+  frameRate(24);
   size(600, 600);
   background(255);
   strokeWeight(0.5);
@@ -27,7 +27,7 @@ void setup() {
     pos[i].x = width/2 + radius * cos(i*TWO_PI/numPos);
     pos[i].y = height/2 + radius * sin(i*TWO_PI/numPos);
   }
-
+  println(pos);
   //balls initialize
   speed = new PVector();
   for (int i=0; i<num; i++) {
@@ -46,6 +46,13 @@ void draw() {
     balls[i].move();
     balls[i].display();
   }
+
+  pushStyle();
+    fill(0);
+    for (int i=0; i<numPos; i++){
+      ellipse(pos[i].x, pos[i].y, 10, 10);
+    }
+  popStyle();
 
   filter(BLUR);
 
@@ -96,7 +103,9 @@ class Ball {
   void display() {
     if (pLoc.mag()<10000) {
       pushStyle();
-      color c = color(map(PVector.dist(loc,endPos),radius,radius*1.2,255,64),acc.mag()*100,map(PVector.dist(loc,endPos),0,radius,0,128));
+      color c = color(map(PVector.dist(loc,endPos),radius,radius*1.2,255,64),
+                      acc.mag()*100,
+                      map(PVector.dist(loc,endPos),0,radius,0,128));
       stroke(c);
       //fast is narrow
       strokeWeight(1/(sp.mag()+1)*10);

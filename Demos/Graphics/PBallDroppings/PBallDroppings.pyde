@@ -1,4 +1,4 @@
-"""
+'''
 u or U    undo
 e or E    delete picked vertex
 r         frequency range -
@@ -13,7 +13,7 @@ b or B    move ball "emitter"
 p         toggle pause
 0         reset all variables
 ' '       reset balls & lines
-"""
+'''
 
 import config
 from java.util import Vector
@@ -30,6 +30,7 @@ def setup():
 
 
 def draw():
+    global closestBounceLine
     background(0)
     config.newball_xlag += (config.newball_x - config.newball_xlag) / 10.0
     config.newball_ylag += (config.newball_y - config.newball_ylag) / 10.0
@@ -313,6 +314,7 @@ def resetBounceLines():
 
 
 def deletePickedVertex():
+    global closestBounceLine
     if (config.closestBounceLineDistance <
             config.closestBounceLine_maxPickingDistance):
         # Register undoable.

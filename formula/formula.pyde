@@ -9,7 +9,7 @@ from tentacle import Tentacle
 
 
 time = 0
-Tick = 0.01
+Tick = 1 / 100.0  # Bad Python FP.
 SphereRadius = 200
 Tentacles = None
 Colors = [[color(169, 202, 240),  # rgb(169, 202, 240) # blues
@@ -32,6 +32,7 @@ Colors = [[color(169, 202, 240),  # rgb(169, 202, 240) # blues
          ]
 
 def setup():
+    global Tentacles
     size(512, 512, OPENGL)
     rectMode(RADIUS)
     ellipseMode(RADIUS)
@@ -41,6 +42,7 @@ def setup():
 
 
 def draw():
+    global time, Tentacles
     rightHanded()
     fade()
     time += Tick

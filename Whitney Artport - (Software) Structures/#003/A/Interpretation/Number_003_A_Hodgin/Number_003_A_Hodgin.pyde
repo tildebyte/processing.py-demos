@@ -11,6 +11,8 @@ Processing v.68 <http://processing.org>
 
 Port to Processing.py/Processing 2.0 by Ben Alkov 17 July 2014
 '''
+from __future__ import division
+
 from circle import Circle
 
 
@@ -34,6 +36,7 @@ circles = None
 # SETUP FUNCTION
 # ****************************************************************************
 def setup():
+    global circles
     size(sketchX, sketchY, Renderer)
     background(Circle.BgColor)
     smooth()
@@ -41,7 +44,10 @@ def setup():
     ellipseMode(RADIUS)
     noStroke()
     frameRate(30)
-    createCircles()
+    Circle.AngleOffset = random(TAU)
+    initRadius = 150
+    circles = [Circle(i, initRadius, TotalCircles)
+               for i in range(TotalCircles)]
 
 
 # ****************************************************************************
@@ -49,27 +55,11 @@ def setup():
 # ****************************************************************************
 def draw():
     translate(sketchXMid, sketchYMid)
-    rotateX(radians(180))
+    rotateX(PI)
     background(Circle.BgColor)
     for circle in circles:
         circle.behave(circles, GravityX, GravityY)
 
 
-def createCircles():
-    angleOffset = random(TAU)
-    initRadius = 150
-    circles = []
-    for i in range(TotalCircles):
-        xPos, yPos = initCirclePos(i, angleOffset, initRadius)
-        circles.append(Circle(i, xPos, yPos, 0, 0, TotalCircles))
-
-
-def initCirclePos(index, angleOffset, initRadius):
-    initTheta = index * (TAU * 0.01) + angleOffset + random(radians(10))
-    initXVel = cos(initTheta) * initRadius
-    initYVel = sin(initTheta) * initRadius
-    return initXVel + GravityX, initYVel + GravityY
-
-
 def mousePressed():
-    createCircles()
+    setup()

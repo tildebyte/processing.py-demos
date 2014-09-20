@@ -1,3 +1,6 @@
+from __future__ import division
+
+
 class Circle(object):
     # Strength of gravitational pull.
     Gravity = 0.075
@@ -5,23 +8,25 @@ class Circle(object):
     xCollVel = 0
     # Collision velocity along y axis.
     yCollVel = 0
+    AngleOffset = 0
     BgColor = color(0)
     FgColor = color(0)
     MaxDistance = 150
 
-    def __init__(self, index, x, y, xVel, yVel, TotalCircles):
+    def __init__(self, index, initRadius, TotalCircles):
         # Circle global ID.
         self.index = index
-        # Circle x position.
-        self.x = x
-        # Circle y position.
-        self.y = y
+        initTheta = (self.index * (TAU * 0.01)
+                     + Circle.AngleOffset + random(radians(10)))
+        # Circle x, y position.
+        self.x = cos(initTheta) * initRadius
+        self.y = sin(initTheta) * initRadius
         # Circle radius.
         self.radius = 2
         # Current velocity along x-axis.
-        self.xVel = xVel
+        self.xVel = 0
         # Current velocity along y-axis.
-        self.yVel = yVel
+        self.yVel = 0
         # Storage for collisions which might happen.
         self.mightCollide = [0] * TotalCircles
         # Storage for collisions which happened.
@@ -40,7 +45,7 @@ class Circle(object):
         self.areWeClose(circles)
         self.areWeColliding(circles)
         self.areWeConnected(circles)
-        self.applyGravity(GravityX, GravityX)
+        self.applyGravity(GravityX, GravityY)
         self.render(circles)
         self.resetCollisions()
 
@@ -57,8 +62,8 @@ class Circle(object):
         for other in others:
             if (self.mightCollide[other.index]
                     and self.index != other.index):
-                self.distances[other.index] = dist(self.x, self.y,
-                                                   other.x, other.y)
+                self.distances[other.index] = dist(other.x, other.y,
+                                                   self.x, self.y)
                 if (self.distances[other.index]
                         < (self.radius + other.radius) * 1.1):
                     self.didCollide[other.index] = True
@@ -79,8 +84,8 @@ class Circle(object):
         for other in others:
             if (self.didCollide[other.index]
                     and other.index != self.index):
-                self.distances[other.index] = dist(self.x, self.y,
-                                                   other.x, other.y)
+                self.distances[other.index] = dist(other.x, other.y,
+                                                   self.x, self.y)
                 if self.distances[other.index] < Circle.MaxDistance:
                     self.thetas[other.index] = self.findAngle(other.x, other.y)
                     Circle.xCollVel += (cos(self.thetas[other.index])

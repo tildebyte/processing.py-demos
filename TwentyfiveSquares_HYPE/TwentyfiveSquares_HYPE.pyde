@@ -4,11 +4,9 @@
 from hype.core.util import H
 from hype.core.interfaces import HCallback
 from hype.extended.behavior import HOscillator
-from hype.extended.drawable import HCanvas
-from hype.extended.drawable import HRect
+from hype.extended.drawable import HCanvas, HRect
 from hype.extended.layout import HGridLayout
 from hype.extended.util import HDrawablePool
-
 
 from random import choice
 
@@ -21,8 +19,8 @@ color1 = 0x406B2B24  # #6B2B24
 color2 = 0xc4831521  # #831521
 
 
-
 def setup():
+    global canvas, pool
     size(568, 568)
     H.init(this).background(0xffE0DFE2)  # #E0DFE2
     smooth()
@@ -45,6 +43,9 @@ def draw():
 
 
 class Callback(HCallback):
+    def __init__(self):
+        pass
+
     @staticmethod
     def run(drawable):
         drawable.anchorAt(H.CENTER)\

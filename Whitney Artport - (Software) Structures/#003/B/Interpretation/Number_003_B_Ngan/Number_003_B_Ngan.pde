@@ -14,7 +14,7 @@
 
 
 float[][] field;
-int[][] fieldShade;
+// int[][] fieldShade;
 int gaph, gapv;
 int marginh, marginv; // margin
 float cnt = 0;
@@ -34,7 +34,7 @@ int cTimer = 0;
 void setup()
 {
   size( 500, 500 );
-  frameRate( 30 );
+  // frameRate( 30 );
 
   gaph = 3;
   gapv = 3;
@@ -52,19 +52,19 @@ void setup()
 
   // field
   field = new float[(width-marginh*2)/gaph][(height-marginv*2)/gapv];
-  fieldShade = new int[field.length][field[0].length];
+  // fieldShade = new int[field.length][field[0].length];
 
   for (int i=0; i<field.length; i++) {
     for (int k=0; k<field[0].length; k++) {
       field[i][k] = PI2-PI/3;
-      fieldShade[i][k] = 1;
+      // fieldShade[i][k] = 1;
     }
   }
 
   circles = new Circle[100];
 
-  ellipseMode( CENTER );
-  noFill();
+  // ellipseMode( CENTER );
+  // noFill();
 }
 
 void draw()
@@ -90,11 +90,11 @@ void draw()
     }
   }
 
-  noStroke();
-  noFill();
+  // noStroke();
+  // noFill();
 
   for (int i =0; i<cCounter; i++) {
-    circles[i].render();
+    circles[i].move();
     circles[i].getGrid();
   }
 
@@ -158,7 +158,7 @@ class Circle
   }
 
   void move() {
-    float angle = sin( sp1 ) - cos(sp2);
+    float angle = getSin( sp1 ) - getCos(sp2);
 
     sp1+=ac1;
     sp2+=ac2;
@@ -182,8 +182,8 @@ class Circle
   }
 
   void repel( float angle ) {
-    x = x + getCos(angle)/10;
-    y = y + getSin(angle)/10;
+    x = x + getCos(angle)*0.1;
+    y = y + getSin(angle)*0.1;
   }
 
   void setState( float px, float py ) {
@@ -199,7 +199,7 @@ class Circle
         float dx = circles[i].x - x;
         float dy = circles[i].y - y;
         float drr = dx*dx + dy*dy;
-        float brr = circles[i].rr + 2*circles[i].r*r + rr;
+        // float brr = circles[i].rr + 2*circles[i].r*r + rr;
         float d = sqrt( drr );
 
         if ( d>r+circles[i].r || d<abs(r-circles[i].r) ) continue; // no solution
@@ -228,7 +228,7 @@ class Circle
     int numy = (int)floor(d/gapv);
 
     int[] pos;
-    float dx, dy, ang;
+    // float dx, dy, ang;
 
     for (int i=sx; i<sx+numx; i++) {
       if (i>=0 && i<field.length) {
@@ -236,14 +236,14 @@ class Circle
           if (k>=0 && k<field[0].length) {
             if (over) {
               pos = getLocation(i, k);
-              dx = pos[0]-x;
-              dy = pos[1]-y;
+              // dx = pos[0]-x;
+              // dy = pos[1]-y;
 
               if (dist( x, y, pos[0], pos[1]) < r) {
                 float da = atan2( pos[1]-iny, pos[0]-inx );
                 if (field[i][k] < da) field[i][k] += PI/20;
                 else if (field[i][k] > da) field[i][k] -= PI/20;
-                fieldShade[i][k] = 2;
+                // fieldShade[i][k] = 2;
               }
             }
           }

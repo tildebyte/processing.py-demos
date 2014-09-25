@@ -96,8 +96,8 @@ class Circle(object):
         return True
 
     def repel(self, angle):
-        self.x = self.x + cos(angle) / 4
-        self.y = self.y + sin(angle) / 4
+        self.x += cos(angle) / 4
+        self.y += sin(angle) / 4
 
     def renderHair(self):
         for hair in self.hairs:

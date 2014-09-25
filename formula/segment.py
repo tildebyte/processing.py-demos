@@ -2,8 +2,8 @@ class Segment(object):
     '''A Segment, which encapsulates its own position and color, and can draw
     itself'''
 
-    def __init__(self, id, tickOffset, altitude, lineColor):
-        self.id = id
+    def __init__(self, index, tickOffset, altitude, lineColor):
+        self.index = index
         # A "magic" number. 12 just seems to look good.
         self.tickOffset = tickOffset * 12
         #  Effectively, the distance between segments.

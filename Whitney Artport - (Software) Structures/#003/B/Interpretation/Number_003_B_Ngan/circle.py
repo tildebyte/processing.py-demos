@@ -1,8 +1,8 @@
-class Circle(object):
-    TableLength = int((TAU * 100) + 1)  # 628 - a full circle.
-    sintable = [sin(i * 0.01) for i in range(TableLength)]
-    costable = [cos(i * 0.01) for i in range(TableLength)]
+from util import getFunc
+from grid import Grid
 
+
+class Circle(object):
     def __init__(self, locX, locY, radius, index):
         self.x = locX
         self.y = locY
@@ -19,14 +19,14 @@ class Circle(object):
         self.iny = 0
 
     def getGrid(self, grid):
-        sx = ceil((self.x - self.radius - grid.margin) / grid.gap)
-        sy = ceil((self.y - self.radius - grid.margin) / grid.gap)
-        numx = floor(self.diameter / grid.gap)
-        numy = floor(self.diameter / grid.gap)
+        sx = ceil((self.x - self.radius - Grid.MarginX) / Grid.GapX)
+        sy = ceil((self.y - self.radius - Grid.MarginY) / Grid.GapY)
+        numx = floor(self.diameter / Grid.GapX)
+        numy = floor(self.diameter / Grid.GapY)
         for i in range(sx, sx + numx):
-            if 0 <= i < grid.fieldSize:
+            if 0 <= i < grid.fieldHeight:
                 for k in range(sy, sy + numy):
-                    if 0 <= k < grid.fieldSize:
+                    if 0 <= k < grid.fieldWidth:
                         if self.over:
                             x, y = grid.getLocation(i, k)
                             if (dist(self.x, self.y, x, y)
@@ -39,8 +39,8 @@ class Circle(object):
         self.over = False
 
     def move(self, circles):
-        angle = (Circle.getFunc('sin', self.speeds[0])
-                 - Circle.getFunc('cos', self.speeds[1]))
+        angle = (getFunc('sin', self.speeds[0])
+                 - getFunc('cos', self.speeds[1]))
         self.speeds[0] += self.accels[0]
         self.speeds[1] += self.accels[1]
         self.speeds[2] += self.accels[2]
@@ -48,8 +48,8 @@ class Circle(object):
             angle += TAU
         elif angle >= TAU:
             angle -= TAU
-        self.x += Circle.getFunc('sin', angle)
-        self.y += Circle.getFunc('cos', angle)
+        self.x += getFunc('sin', angle)
+        self.y += getFunc('cos', angle)
         self.checkBounds()
         self.checkOverlap(circles)
 
@@ -85,22 +85,10 @@ class Circle(object):
 
 
     def repel(self, angle):
-        self.x += Circle.getFunc('cos', angle) * 0.1
-        self.y += Circle.getFunc('sin', angle) * 0.1
+        self.x += getFunc('cos', angle) * 0.1
+        self.y += getFunc('sin', angle) * 0.1
 
     def setState(self, intersectX, intersectY):
         self.inx = intersectX
         self.iny = intersectY
         self.over = True
-
-    @staticmethod
-    def getFunc(func, val):
-        if val < 0:
-            val += TAU
-        if val >= TAU:
-            val -= TAU
-        val = min(TAU, max(0, val))  # 6.27
-        if func == 'sin':
-            return Circle.sintable[floor(val * 100)]
-        elif func == 'cos':
-            return Circle.costable[floor(val * 100)]

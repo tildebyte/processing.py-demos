@@ -15,20 +15,17 @@ from circle import Circle
 from grid import Grid
 
 
-grid = None
+SketchWidth = 500
+SketchHeight = 500
+grid = Grid(TAU - PI / 3, SketchWidth, SketchHeight)
 NumCircles = 10
 circles = []
 counter = 0
-CirclePosition = 250
 Radius = 40
 
 
 def setup():
-    global grid
-    size(500, 500)
-    # Init here because of sketch `width` & `height` being undefined prior to
-    # this point.
-    grid = Grid(TAU - PI / 3, 20, 3)
+    size(SketchWidth, SketchHeight)
 
 
 def draw():
@@ -36,7 +33,8 @@ def draw():
     background(50)
     stroke(255, 255, 255, 50)
     if frameCount % 5 == 0 and counter < NumCircles:
-        circles.append(Circle(CirclePosition, CirclePosition, Radius, counter))
+        circles.append(Circle(SketchWidth / 2, SketchHeight / 2,
+                              Radius, counter))
         counter += 1
     grid.update()
     for circle in circles:

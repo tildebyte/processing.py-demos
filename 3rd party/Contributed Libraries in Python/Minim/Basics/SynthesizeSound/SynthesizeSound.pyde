@@ -23,10 +23,9 @@ def draw():
     # draw the waveform of the output
     for i in range(out.bufferSize() - 1):
         line(i, 50 - out.left.get(i) * 50,
-            i + 1, 50 - out.left.get(i + 1) * 50)
-        line(
-            i, 150 - out.right.get(i) * 50,
-            i + 1, 150 - out.right.get(i + 1) * 50)
+             i + 1, 50 - out.left.get(i + 1) * 50)
+        line(i, 150 - out.right.get(i) * 50,
+             i + 1, 150 - out.right.get(i + 1) * 50)
 
     # draw the waveform we are using in the oscillator
     stroke(128, 0, 0)

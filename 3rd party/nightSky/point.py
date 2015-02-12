@@ -38,16 +38,12 @@ class Point(object):
                 return
 
     def setLines(self, others):
-        # for other in others:
-        #     if (self is not other
-        #             and dist(self.x, self.y, other.x, other.y) < Limit / 3):
-        #         lines.append(PVector(self.index,
-        #                              other.index))
         thirdLimit = Point.Limit / 3
         self.lines = [other.index
                       for other in others
                       if (self is not other
-                          and dist(self.x, self.y, other.x, other.y) < thirdLimit)]
+                          and dist(self.startX, self.startY,
+                                   other.startX, other.startY) < thirdLimit)]
 
     def update(self, time, others):
         if self.rt:

@@ -42,19 +42,15 @@
 add_library('MSAFluid')
 from particle_system import ParticleSystem
 
-FLUID_WIDTH = 120
-invWidth = 0
-invHeight = 0
-fluidSolver = None
-particleSystem = None
 drawFluid = True
 drawSparks = True
-imgFluid = None
-aspectRatio = 0
 
 
 def setup():
+    global invWidth, invHeight, fluidSolver
+    global particleSystem, imgFluid, aspectRatio
     size(784, 484, OPENGL)
+    FLUID_WIDTH = 120
     invWidth = 1.0 / width
     invHeight = 1.0 / height
     aspectRatio = (width * invHeight) ** 2
@@ -94,6 +90,7 @@ def draw():
 
 
 def mousePressed():
+    global drawFluid, drawSparks
     if mouseButton == LEFT:
         drawFluid = not drawFluid
     elif mouseButton == RIGHT:

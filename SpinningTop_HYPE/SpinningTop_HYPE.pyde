@@ -29,11 +29,10 @@ top = None
 
 
 def setup():
+    size(800, 800, P3D)
     global top
-    size(512, 512, OPENGL)
-    frameRate(30)
+    frameRate(24)
     H.init(this).background(0xff000000)
-    smooth()
     canvas = H.add(HCanvas()).autoClear(False).fade(1)
     # Initial position in the center of the screen.
     top = Top(width / 2, height / 2)
@@ -45,6 +44,6 @@ def setup():
 def draw():
     top.update(width, height, radians(frameCount))
     H.drawStage()
-    # saveFrame('C:/Users/IBM_ADMIN/Documents/frames/####.tif')
+    # saveFrame('frames/####.tif') 
     # if frameCount == 900:
     #     exit()

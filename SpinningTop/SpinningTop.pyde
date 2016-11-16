@@ -12,7 +12,7 @@ from getPaletteCSV import getPaletteCSV
 from top import Top
 
 
-Top.Palette = getPaletteCSV('Less-Angry_Rainbow_hex.csv')
+Top.Palette = getPaletteCSV('data/Less-Angry_Rainbow_hex.csv')
 Top.StrokeWeight = 2
 Top.Radius = 1.5
 top = None
@@ -34,3 +34,6 @@ def draw():
     rect(0, 0, width, height)
     top.move(width, height, radians(frameCount))
     top.drawMe()
+    # saveFrame('frames/####.tif') 
+    # if frameCount == 900:
+    #     exit()

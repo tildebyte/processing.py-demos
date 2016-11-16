@@ -8,56 +8,57 @@ Implemented in Processing.py/Processing 2.1 by Ben Alkov 11-16 Sept 2014.
 from tentacle import Tentacle
 
 
-time = 0
-Tick = 1 / 100.0  # Boo Python FP.
-SphereRadius = 200
-Colors = [[color(169, 202, 240),  # rgb(169, 202, 240)  blues
-           color(160, 191, 227),  # rgb(160, 191, 227)
-           color(142, 170, 202),  # rgb(142, 170, 202)
-           color(115, 137, 163),  # rgb(115, 137, 163)
-           color(70, 84, 99)],  # rgb(70, 84, 99)
-          [color(206, 151, 96),  # rgb(206, 151, 96)  reds
-           color(207, 105, 43),  # rgb(207, 105, 43)
-           color(193, 87, 37),  # rgb(193, 87, 37)
-           color(124, 40, 12),  # rgb(124, 40, 12)
-           color(120, 41, 13)],  # rgb(120, 41, 13)
-          [color(115, 146, 34),  # rgb(115, 146, 34)  greens
-           color(104, 135, 23),  # rgb(104, 135, 23)
-           color(92, 109, 29),  # rgb(92, 109, 29)
-           color(78, 93, 22),  # rgb(78, 93, 22)
-           color(63, 76, 16)]  # rgb(63, 76, 16)
+def settings():
+    fullScreen(OPENGL)
+
+
+Colors = [[color(121, 53, 31),  # rgb(121, 53, 31)  reds
+           color(214, 133, 106)],  # rgb(214, 133, 106)
+          [color(63, 79, 8),  # rgb(63, 79, 8)  greens
+           color(146, 161, 88)],  # rgb(146, 161, 88)
+          [color(62, 74, 89),  # rgb(62, 74, 89)  blues
+           color(142, 155, 172)]  # rgb(142, 155, 172)
          ]
-Tentacles = [Tentacle(i * -100, Colors[i % 3])
-             for i in range(6)]
+NumTentacles = 9
 
-def setup():
-    size(512, 512, OPENGL)
-    rectMode(RADIUS)
-    ellipseMode(RADIUS)
-    strokeWeight(2)
-
-
-def draw():
-    global time
-    rightHanded()
-    fade()
-    time += Tick
-    for t in Tentacles:
-        t.update(time, Tick, SphereRadius)
-
-
-def rightHanded():
+def rotateCoords():
     # Fix flippin' coordinate system.
     # Not the *same* as right-handed, but good enough.
     # `-z` comes out of the screen.
-    rotateX(TAU / 2)  # y up.
-    translate(256, -256, 0)  # Centered.
+    rotateX(PI)  # y up.
+    translate(540, -540, 0)  # Centered.
 
 
-def fade():
-    # Encapsulate alpha blend (to leave trails).
-    with pushMatrix():
-        fill(0, 10)
-        noStroke()
-        translate(0, 0, SphereRadius)
-        rect(0, 0, width, height)
+def fade(opacity):
+    # Encapsulate alpha blend.
+    # `opacity` < 255 for trails,
+    # else no trails.
+    if opacity == 255:
+        background(0)
+    else:
+        with pushMatrix():
+            fill(0, opacity)
+            noStroke()
+            translate(0, 0, 10)
+            rect(0, 0, 2 * width, 2 * height)
+
+def setup():
+    global Tentacles
+    background(0)
+    frameRate(24)
+    rectMode(RADIUS)
+    Tentacles = [Tentacle(i, Colors[i % 3])
+                 for i in range(NumTentacles)]
+
+def draw():
+    # global time
+    rotateCoords()
+    fade(255)
+    # The animation is *much* too fast using `frameCount` on its own.
+    time = frameCount * 0.01
+    for t in Tentacles:
+        # I got weird artifacts with `frameCount` < 5.
+        if time < 0.05:
+            pass
+        t.update(time)
+    # saveFrame("frames/screen-######.tif")

@@ -1,4 +1,4 @@
-# add_library('hype')
+#  add_library('hype')
 '''
 1. One hundred `HRect`
 2. Of randomly-selected size
@@ -16,22 +16,27 @@ Implementation by Ben Alkov 7-12 August 2014
 '''
 from hype.core.util import H
 from hype.extended.colorist import HColorField
-from hype.extended.drawable import HGroup
-from hype.extended.drawable import HRect
+from hype.extended.drawable import HGroup, HRect
+
+from gifAnimation import GifMaker, Gif
 
 import util
 
 from parentcallback import ParentCallback
 from rectcallback import RectCallback
 
+gifExport = GifMaker(this, "export.gif")
+
 
 def setup():
-    size(512, 512)
+    size(1080, 1080)
+    frameRate(24)
+    gifExport.setRepeat(0) # make it an "endless" animation
+    # gifExport.setTransparent(255, 255, 255)
     util.centerX = width / 2
     util.centerY = height / 2
-    frameRate(30)
     H.init(this).background(0xff595E6E)  # #595E6E
-    smooth()
+    # smooth()
     util.colorfield = (HColorField(width, height)
                        .addPoint(0, util.centerY, 0xff001CDD, 0.7)  # #001CDD
                        .addPoint(width, util.centerY, 0xff71BB00, 0.7)  # #71BB00
@@ -48,6 +53,8 @@ def setup():
 
 def draw():
     H.drawStage()
-    # saveFrame('C:/Users/IBM_ADMIN/Documents/frames/####.tif')
-    # if frameCount == 900:
-    #     exit()
+    gifExport.setDelay(41)
+    # gifExport.addFrame()
+    if frameCount == 480:
+        gifExport.finish()
+        exit()
